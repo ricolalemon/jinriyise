@@ -5,135 +5,148 @@
 <title>今日一色</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&family=ZCOOL+KuaiLe&display=swap">
 <style>
-/* 宣纸底子、朱红印章、青花碗。每天一个中国传统色，用七种国画颜料一滴一滴调出来。外观固定是纸的颜色，不跟系统深色走 */
+/* 美术课的木头桌子上：一张色卡、一只调色碗、一排颜料瓶。暖光、薄荷绿和珊瑚红。外观固定，不跟系统深色走 */
 :root{
   color-scheme:light;
-  --paper:#f3ece0;
-  --paper2:#e9dfcd;
-  --ink:#2b2522;
-  --soft:#6f655c;
-  --line:rgba(60,40,20,.14);
-  --seal:#b8322a;
-  --qing:#2c4f8a;
-  --font-brush:"Ma Shan Zheng","STKaiti","KaiTi",serif;
-  --font-body:"Noto Serif SC","Songti SC","SimSun",serif;
+  --ink:#33302e;
+  --soft:#7a716a;
+  --mint:#5fc7a8;
+  --mint-d:#3b9c80;
+  --coral:#ff7a6b;
+  --card:#fffaf3;
+  --line:rgba(60,40,30,.14);
+  --font-title:"ZCOOL KuaiLe","PingFang SC","Microsoft YaHei",sans-serif;
+  --font-body:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --font-num:"Baloo 2","Noto Sans SC",system-ui,sans-serif;
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html,body{margin:0;min-height:100%}
-body{color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;touch-action:manipulation;-webkit-user-select:none;user-select:none;
-  background-color:var(--paper);
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35  0 0 0 0 .27  0 0 0 0 .18  0 0 0 .09 0'/></filter><rect width='240' height='240' filter='url(%23n)'/></svg>"),radial-gradient(120% 70% at 50% 0%,#f8f3ea 0%,var(--paper) 55%,var(--paper2) 100%);
+body{color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;touch-action:manipulation;-webkit-user-select:none;user-select:none;
+  background-color:#ecd0aa;
+  background-image:repeating-linear-gradient(0deg,rgba(120,70,30,0) 0 116px,rgba(120,70,30,.09) 116px 118px,rgba(255,255,255,.12) 118px 120px),radial-gradient(130% 80% at 50% 0%,#f8e7cf 0%,#efd3ae 55%,#dfb98b 100%);
   background-attachment:fixed}
 button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
-button:focus-visible{outline:2px solid var(--seal);outline-offset:3px}
-.wrap{width:min(440px,100%);margin:0 auto;padding:calc(14px + env(safe-area-inset-top,0px)) 16px calc(22px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:12px}
+button:focus-visible{outline:3px solid var(--coral);outline-offset:2px}
+.wrap{width:min(440px,100%);margin:0 auto;padding:calc(12px + env(safe-area-inset-top,0px)) 16px calc(22px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:12px}
 
-/* 抬头：印章加期数 */
-header{display:flex;align-items:center;gap:12px}
-.seal{flex:none;width:58px;height:58px;border-radius:8px;background:var(--seal);color:#fff4ea;display:grid;grid-template-columns:1fr 1fr;place-items:center;padding:6px;font-family:var(--font-brush);font-size:20px;line-height:1;box-shadow:inset 0 0 0 2px rgba(255,240,220,.35),0 2px 0 rgba(120,20,10,.25);transform:rotate(-4deg)}
-.seal span{display:block}
-.hd{flex:1;min-width:0}
-.hd h1{margin:0;font-family:var(--font-brush);font-weight:400;font-size:30px;line-height:1.1;letter-spacing:.08em}
-.hd p{margin:0;color:var(--soft);font-size:13px}
-.icons{display:flex;gap:6px}
-.icon{width:36px;height:36px;border:0;border-radius:50%;background:rgba(255,255,255,.55);box-shadow:inset 0 0 0 1px var(--line);font-size:15px;display:grid;place-items:center}
+/* 抬头 */
+header{display:flex;align-items:center;gap:8px}
+.brand{flex:1;min-width:0}
+.logo{margin:0;font-family:var(--font-title);font-weight:400;font-size:32px;line-height:1.05;color:var(--mint-d);text-shadow:0 3px 0 #fff;white-space:nowrap}
+.sub{display:block;margin-top:3px;font-size:13px;font-weight:700;color:#8a5a34;white-space:nowrap}
+.ibtn{width:36px;height:36px;border:0;border-radius:50%;background:rgba(255,250,243,.92);box-shadow:0 3px 10px rgba(60,30,10,.16);font-size:15px;font-weight:900;display:grid;place-items:center}
 
-/* 今天的颜色：一张色卡 */
-.target{position:relative;height:150px;border-radius:14px;overflow:hidden;box-shadow:0 10px 24px rgba(60,30,10,.18),inset 0 0 0 1px rgba(0,0,0,.06);transition:background-color .6s}
-.target::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,0) 40%,rgba(0,0,0,.06));pointer-events:none}
-.target .name{position:absolute;right:16px;top:12px;writing-mode:vertical-rl;font-family:var(--font-brush);font-size:42px;line-height:1;letter-spacing:.12em}
-.target .desc{position:absolute;left:16px;bottom:12px;right:80px;font-size:13px;line-height:1.5}
-.target .hex{position:absolute;left:16px;top:12px;font-size:12px;letter-spacing:.08em;opacity:.8}
-.target.light{color:#2b2522}
-.target.dark{color:#fbf6ee}
+/* 今天的颜色：五金店里那种刷墙色卡 */
+.paint{position:relative;border-radius:20px;background:var(--card);box-shadow:0 10px 24px rgba(80,40,10,.2);padding:8px;transform:rotate(-.6deg)}
+.paint::before{content:"";position:absolute;left:22px;top:-9px;width:70px;height:22px;background:rgba(255,122,107,.72);border-radius:3px;transform:rotate(-5deg);box-shadow:0 2px 4px rgba(0,0,0,.08);z-index:2}
+.paint .sw{position:relative;height:118px;border-radius:14px;transition:background-color .6s;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
+.paint .sw::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,0) 45%,rgba(0,0,0,.05));pointer-events:none}
+.paint .hex{position:absolute;right:12px;bottom:9px;font-family:var(--font-num);font-weight:700;font-size:13px;letter-spacing:.06em;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.25)}
+.paint .info{display:flex;align-items:flex-end;gap:10px;padding:8px 6px 2px}
+.paint .nm{flex:1;min-width:0}
+.paint .nm b{display:block;font-family:var(--font-title);font-weight:400;font-size:28px;line-height:1.15}
+.paint .nm span{display:block;color:var(--soft);font-size:13px}
+.diff{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:3px;padding-bottom:2px}
+.diff .dots{display:flex;gap:3px}
+.diff .dots i{width:9px;height:9px;border-radius:50%;background:#e6dccf}
+.diff .dots i.on{background:var(--coral)}
+.diff span{font-size:12px;font-weight:700;color:var(--coral)}
 
 /* 碗 */
-.bowlbox{position:relative;display:grid;place-items:center;margin-top:-4px}
-#bowl{width:min(300px,78vw);aspect-ratio:1;display:block}
-.bowl-note{position:absolute;bottom:14%;left:0;right:0;text-align:center;color:var(--soft);font-size:13px;pointer-events:none}
-.count{position:absolute;right:4px;top:4px;padding:2px 10px;border-radius:999px;background:rgba(255,255,255,.6);box-shadow:inset 0 0 0 1px var(--line);font-size:12px;color:var(--soft)}
-.verdict{position:absolute;left:0;right:0;top:44%;text-align:center;pointer-events:none;opacity:0;transform:scale(.8);transition:opacity .3s,transform .4s cubic-bezier(.2,.9,.3,1.4)}
+.bowlbox{position:relative;display:grid;place-items:center}
+#bowl{width:min(280px,72vw);aspect-ratio:1;display:block}
+.bowl-note{position:absolute;bottom:47%;left:0;right:0;text-align:center;color:var(--soft);font-size:13px;font-weight:500;pointer-events:none}
+.count{position:absolute;right:0;top:6px;padding:2px 11px;border-radius:999px;background:rgba(255,250,243,.92);box-shadow:0 3px 8px rgba(60,30,10,.12);font-size:13px;font-weight:700}
+.count b{font-family:var(--font-num);font-size:15px}
+.verdict{position:absolute;left:0;right:0;top:42%;text-align:center;pointer-events:none;opacity:0;transform:scale(.8);transition:opacity .3s,transform .4s cubic-bezier(.2,.9,.3,1.4)}
 .verdict.show{opacity:1;transform:none}
-.verdict b{display:inline-block;padding:4px 16px;border-radius:999px;background:rgba(255,255,255,.88);box-shadow:0 6px 16px rgba(0,0,0,.12);font-family:var(--font-brush);font-weight:400;font-size:30px;letter-spacing:.04em}
+.verdict b{display:inline-block;padding:5px 18px;border-radius:999px;background:var(--ink);color:#fff;box-shadow:0 8px 18px rgba(0,0,0,.2);font-family:var(--font-title);font-weight:400;font-size:26px}
 
-/* 七个颜料碟 */
-.dishes{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
-.dish{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;border:0;background:none;padding:2px 0}
-.dish .d{width:44px;height:44px;border-radius:50%;background:radial-gradient(circle at 50% 46%,var(--c) 0 52%,transparent 54%),radial-gradient(circle at 38% 32%,#fff 0,#f4f1ea 42%,#d9d2c4 100%);box-shadow:0 3px 6px rgba(60,30,10,.18),inset 0 -2px 3px rgba(0,0,0,.08);transition:transform .12s}
-.dish .d::after{content:"";display:block;width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 40% 36%,rgba(255,255,255,.55) 0 8%,transparent 20%)}
-.dish:active .d{transform:scale(.9)}
-.dish .n{font-family:var(--font-brush);font-size:16px;line-height:1}
-.dish .k{position:absolute;top:-2px;right:calc(50% - 30px);min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--seal);color:#fff;font-size:11px;font-weight:600;line-height:18px;text-align:center}
-.dish:disabled{opacity:.4}
+/* 颜料瓶 */
+.tray{border-radius:22px;background:var(--card);box-shadow:0 8px 20px rgba(80,40,10,.16);padding:10px 6px 8px}
+.dishes{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px}
+.dish{position:relative;display:flex;flex-direction:column;align-items:center;gap:3px;border:0;background:none;padding:12px 0 0}
+.dish .d{position:relative;width:32px;height:42px;border-radius:9px 9px 12px 12px;background:linear-gradient(90deg,rgba(255,255,255,.42) 0 16%,rgba(255,255,255,0) 38%,rgba(0,0,0,.1) 100%),var(--c);box-shadow:0 4px 8px rgba(60,30,10,.2),inset 0 -3px 0 rgba(0,0,0,.12);transition:transform .12s}
+.dish .d::before{content:"";position:absolute;left:50%;top:-9px;width:18px;height:11px;transform:translateX(-50%);border-radius:5px 5px 2px 2px;background:#fff;box-shadow:inset 0 -2px 0 rgba(0,0,0,.1),0 0 0 1px rgba(0,0,0,.06)}
+.dish .d::after{content:"";position:absolute;left:50%;top:-15px;width:6px;height:8px;transform:translateX(-50%);border-radius:3px 3px 1px 1px;background:var(--c);box-shadow:0 0 0 1px rgba(0,0,0,.06)}
+.dish.white .d{box-shadow:0 4px 8px rgba(60,30,10,.16),inset 0 -3px 0 rgba(0,0,0,.08),inset 0 0 0 1.5px var(--line)}
+.dish:active .d{transform:scale(.9) rotate(-6deg)}
+.dish .n{font-weight:700;font-size:13px;line-height:1}
+.dish .k{position:absolute;top:0;right:calc(50% - 26px);z-index:1;min-width:19px;height:19px;padding:0 5px;border-radius:10px;background:var(--coral);color:#fff;font-family:var(--font-num);font-size:12px;font-weight:800;line-height:19px;text-align:center;box-shadow:0 2px 4px rgba(0,0,0,.15)}
+.dish:disabled{opacity:.45}
 
 .ctrl{display:flex;gap:8px}
-.btn{flex:1;border:0;border-radius:12px;padding:11px 10px;background:rgba(255,255,255,.62);box-shadow:inset 0 0 0 1px var(--line);font-size:15px;font-weight:600}
-.btn.main{flex:1.6;background:var(--ink);color:#f8f3ea;box-shadow:0 6px 14px rgba(40,25,15,.25)}
-.btn:disabled{opacity:.4}
-.btn:active:not(:disabled){transform:translateY(1px)}
+.btn{flex:1;border:0;border-radius:14px;padding:11px 10px;font-weight:900;font-size:15px;background:#fff;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line),0 3px 8px rgba(60,30,10,.08)}
+.btn.main{flex:1.7;background:var(--mint);color:#fff;box-shadow:inset 0 -4px 0 rgba(0,0,0,.14),0 8px 18px rgba(40,120,100,.3)}
+.btn:disabled{opacity:.45}
+.btn:active:not(:disabled){transform:translateY(2px)}
 
 /* 每一次比一比 */
 .tries{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
-.try{display:flex;flex-direction:column;align-items:center;gap:3px}
-.try .sw{width:38px;height:38px;border-radius:50%;border:1.5px dashed rgba(60,40,20,.25)}
-.try.done .sw{border:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08),0 2px 5px rgba(0,0,0,.12)}
-.try .p{font-size:12px;color:var(--soft);font-weight:600;min-height:1.4em}
-.try.best .p{color:var(--seal)}
+.try{display:flex;flex-direction:column;align-items:center;gap:2px}
+.try .sw{width:38px;height:38px;border-radius:50%;border:2px dashed rgba(90,50,20,.22)}
+.try.done .sw{border:3px solid #fff;box-shadow:0 3px 8px rgba(60,30,10,.18)}
+.try .p{font-family:var(--font-num);font-size:14px;font-weight:800;color:var(--soft);min-height:1.4em;line-height:1.4}
+.try.best .p{color:var(--mint-d)}
 .hints{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;min-height:30px}
-.hint{padding:3px 12px;border-radius:999px;background:rgba(255,255,255,.65);box-shadow:inset 0 0 0 1px var(--line);font-size:13px}
-.hint.big{background:var(--ink);color:#f8f3ea;box-shadow:none;font-weight:600}
-footer{text-align:center;color:var(--soft);font-size:12px}
+.hint{padding:3px 12px;border-radius:999px;background:rgba(255,250,243,.92);box-shadow:0 2px 6px rgba(60,30,10,.1);font-size:13px;font-weight:700}
+.hint.big{background:var(--ink);color:#fff;box-shadow:none}
+footer{text-align:center;color:#8a6a4c;font-size:12px;font-weight:500}
 
 /* 弹窗 */
-#modal{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(40,25,15,.35);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
-.card{width:min(380px,100%);max-height:calc(100% - 16px);overflow:auto;border-radius:18px;background:var(--paper);background-image:inherit;box-shadow:0 24px 60px rgba(40,20,10,.35);padding:18px;display:flex;flex-direction:column;gap:12px;animation:pop .35s cubic-bezier(.2,.9,.3,1.2)}
-@keyframes pop{from{transform:translateY(14px) scale(.96);opacity:0}}
-.card h2{margin:0;font-family:var(--font-brush);font-weight:400;font-size:30px;text-align:center;letter-spacing:.08em}
+#modal{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(50,30,20,.45)}
+.card{width:min(380px,100%);max-height:calc(100% - 16px);overflow:auto;border-radius:24px;background:var(--card);box-shadow:0 24px 60px rgba(40,20,10,.35);padding:22px 18px 18px;display:flex;flex-direction:column;gap:12px;animation:pop .35s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes pop{from{transform:translateY(14px) scale(.95);opacity:0}}
+.card h2{margin:0;font-family:var(--font-title);font-weight:400;font-size:30px;text-align:center}
 .card p{margin:0}
-.card .swatch{position:relative;height:120px;border-radius:12px;overflow:hidden}
-.card .swatch .name{position:absolute;right:14px;top:10px;writing-mode:vertical-rl;font-family:var(--font-brush);font-size:36px;line-height:1}
-.card .swatch .hex{position:absolute;left:14px;bottom:10px;font-size:12px;letter-spacing:.08em}
-.score{text-align:center;font-family:var(--font-brush);font-size:56px;line-height:1}
-.score small{display:block;font-family:var(--font-body);font-size:13px;color:var(--soft)}
-.recipe{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
-.recipe .r{display:flex;flex-direction:column;align-items:center;font-size:12px}
-.recipe .r i{display:block;width:30px;height:30px;border-radius:50%;background:var(--c);box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
-.recipe .r b{font-family:var(--font-brush);font-weight:400;font-size:15px}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;gap:6px}
-.stats b{display:block;font-size:22px}
+.how{margin:0;padding-left:1.2em;font-size:14px;display:flex;flex-direction:column;gap:6px}
+.card .swatch{position:relative;height:110px;border-radius:16px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
+.card .swatch .name{position:absolute;left:14px;bottom:8px;font-family:var(--font-title);font-size:30px;line-height:1.1}
+.card .swatch .hex{position:absolute;right:14px;top:10px;font-family:var(--font-num);font-weight:700;font-size:13px;letter-spacing:.06em}
+.score{text-align:center;font-family:var(--font-num);font-weight:800;font-size:56px;line-height:1;color:var(--mint-d)}
+.score small{display:block;margin-top:6px;font-family:var(--font-body);font-weight:500;font-size:13px;color:var(--soft)}
+.recipe{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
+.recipe .r{display:flex;flex-direction:column;align-items:center;font-size:12px;color:var(--soft)}
+.recipe .r i{display:block;width:26px;height:32px;margin-bottom:3px;border-radius:7px 7px 9px 9px;background:var(--c);box-shadow:inset 0 -3px 0 rgba(0,0,0,.12),inset 0 0 0 1px rgba(0,0,0,.08)}
+.recipe .r b{font-size:13px;color:var(--ink)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;gap:6px;padding:10px 0;border-radius:16px;background:#fff;box-shadow:inset 0 0 0 1.5px var(--line)}
+.stats b{display:block;font-family:var(--font-num);font-weight:800;font-size:24px;line-height:1.2}
 .stats span{font-size:12px;color:var(--soft)}
 .row{display:flex;gap:8px}
 .row > *{flex:1}
 .small{font-size:12px;color:var(--soft);text-align:center}
-.toast{position:fixed;left:50%;top:18px;z-index:30;transform:translate(-50%,-10px);opacity:0;padding:8px 18px;border-radius:999px;background:var(--ink);color:#f8f3ea;font-size:14px;transition:all .25s;pointer-events:none}
+.toast{position:fixed;left:50%;top:18px;z-index:30;transform:translate(-50%,-10px);opacity:0;padding:8px 18px;border-radius:999px;background:var(--ink);color:#fff;font-size:14px;font-weight:700;transition:all .25s;pointer-events:none}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 @media (prefers-reduced-motion:reduce){.card{animation:none}}
 </style>
 
 <div class="wrap">
   <header>
-    <div class="seal" aria-hidden="true"><span>今</span><span>日</span><span>一</span><span>色</span></div>
-    <div class="hd"><h1 id="title">今日一色</h1><p id="sub"></p></div>
-    <div class="icons">
-      <button class="icon" id="btnPractice" type="button" aria-label="练一练">练</button>
-      <button class="icon" id="btnHelp" type="button" aria-label="怎么玩">?</button>
-      <button class="icon" id="btnSound" type="button" aria-label="声音">🔊</button>
-    </div>
+    <div class="brand"><h1 class="logo" id="title">今日一色</h1><span class="sub" id="sub"></span></div>
+    <button class="ibtn" id="btnPractice" type="button" aria-label="练一练">练</button>
+    <button class="ibtn" id="btnHelp" type="button" aria-label="怎么玩">?</button>
+    <button class="ibtn" id="btnSound" type="button" aria-label="声音">🔊</button>
   </header>
 
-  <div class="target" id="target"><span class="hex" id="tHex"></span><span class="name" id="tName"></span><span class="desc" id="tDesc"></span></div>
+  <div class="paint" id="target">
+    <div class="sw" id="tSw"><span class="hex" id="tHex"></span></div>
+    <div class="info">
+      <div class="nm"><b id="tName"></b><span id="tDesc"></span></div>
+      <div class="diff" id="tDiff"></div>
+    </div>
+  </div>
 
   <div class="bowlbox">
     <canvas id="bowl" aria-label="调色碗"></canvas>
-    <span class="count" id="count">0 / 24 滴</span>
+    <span class="count" id="count"></span>
     <div class="bowl-note" id="bowlNote">点下面的颜料，往碗里滴</div>
     <div class="verdict" id="verdict"><b></b></div>
   </div>
 
-  <div class="dishes" id="dishes"></div>
+  <div class="tray"><div class="dishes" id="dishes"></div></div>
 
   <div class="ctrl">
     <button class="btn" id="btnUndo" type="button">撤一滴</button>
@@ -143,7 +156,7 @@ footer{text-align:center;color:var(--soft);font-size:12px}
 
   <div class="hints" id="hints"></div>
   <div class="tries" id="tries"></div>
-  <footer id="foot">每天一个中国传统色 · 六次机会</footer>
+  <footer id="foot">每天一个颜色 · 六次机会 · 周末最难</footer>
 </div>
 <div id="modal" hidden></div>
 <div class="toast" id="toast"></div>
@@ -151,8 +164,8 @@ footer{text-align:center;color:var(--soft);font-size:12px}
 <script>
 (() => {
 'use strict';
-const PIGMENTS = [{"id": "zhusha", "name": "朱砂", "hex": "#e2452b", "k": 1}, {"id": "yanzhi", "name": "胭脂", "hex": "#b81d52", "k": 1}, {"id": "tenghuang", "name": "藤黄", "hex": "#f8c81c", "k": 1}, {"id": "shilv", "name": "石绿", "hex": "#2fae7a", "k": 1}, {"id": "huaqing", "name": "花青", "hex": "#1d5e9a", "k": 1}, {"id": "baifen", "name": "白粉", "hex": "#f8f6f0", "k": 4}, {"id": "mo", "name": "墨", "hex": "#232125", "k": 0.5}];
-const COLORS = [{"name": "玄青", "hex": "#3d3b4f", "recipe": [1, 4, 1, 5, 2, 1, 0], "desc": "深黑带青"}, {"name": "绛紫", "hex": "#8c4356", "recipe": [5, 5, 0, 1, 0, 5, 1], "desc": "深沉的紫红"}, {"name": "赭石", "hex": "#835a33", "recipe": [3, 2, 7, 2, 0, 3, 0], "desc": "国画颜料，红褐色的土"}, {"name": "黛绿", "hex": "#3d5b4a", "recipe": [2, 1, 2, 1, 5, 3, 1], "desc": "深山老林的绿"}, {"name": "黛蓝", "hex": "#435166", "recipe": [1, 2, 0, 9, 0, 2, 1], "desc": "古时女子画眉用的青黑色"}, {"name": "鸦青", "hex": "#434c50", "recipe": [1, 3, 2, 2, 4, 3, 0], "desc": "乌鸦羽毛，黑里透着青"}, {"name": "葡萄紫", "hex": "#7b3b6a", "recipe": [0, 6, 0, 0, 0, 5, 3], "desc": "熟透的葡萄"}, {"name": "苔绿", "hex": "#6c7d3a", "recipe": [0, 0, 8, 0, 1, 6, 3], "desc": "石上青苔"}, {"name": "藏青", "hex": "#2c4d7d", "recipe": [0, 2, 0, 3, 9, 2, 1], "desc": "蓝里带黑"}, {"name": "嫣红", "hex": "#ed7a81", "recipe": [1, 2, 1, 0, 0, 12, 0], "desc": "原来姹紫嫣红开遍"}, {"name": "檀色", "hex": "#b26e62", "recipe": [6, 1, 0, 0, 0, 9, 1], "desc": "浅红褐，像檀木"}, {"name": "枫叶红", "hex": "#c5262c", "recipe": [0, 8, 5, 0, 0, 0, 0], "desc": "霜叶红于二月花"}, {"name": "桂黄", "hex": "#f7c460", "recipe": [1, 0, 3, 0, 0, 10, 0], "desc": "桂花开了"}, {"name": "竹青", "hex": "#7a9263", "recipe": [0, 0, 1, 1, 0, 4, 1], "desc": "新竹竿上的青绿"}, {"name": "青碧", "hex": "#4bbfa4", "recipe": [0, 0, 0, 11, 1, 6, 0], "desc": "鲜亮的青绿"}, {"name": "天水碧", "hex": "#5da3ad", "recipe": [0, 0, 0, 3, 3, 11, 1], "desc": "传说南唐宫人晾在院里的绢被露水染成的碧色"}, {"name": "墨灰", "hex": "#748897", "recipe": [1, 1, 0, 5, 0, 9, 0], "desc": "淡墨晕开的灰"}, {"name": "霁青", "hex": "#63bcd0", "recipe": [0, 0, 0, 1, 2, 7, 0], "desc": "雨后放晴的天空"}, {"name": "群青", "hex": "#3d5da5", "recipe": [0, 2, 0, 0, 7, 5, 0], "desc": "深而浓的蓝"}, {"name": "妃色", "hex": "#e95b38", "recipe": [14, 0, 1, 0, 0, 3, 0], "desc": "介于红和橙之间的娇艳"}, {"name": "竹月", "hex": "#7fa5af", "recipe": [0, 0, 0, 0, 1, 9, 1], "desc": "月光照在竹林上"}, {"name": "赤金", "hex": "#f7c043", "recipe": [1, 0, 7, 0, 0, 8, 0], "desc": "金子的暖黄"}, {"name": "酡红", "hex": "#d73827", "recipe": [5, 2, 3, 0, 0, 0, 0], "desc": "饮酒后脸上的红"}, {"name": "驼色", "hex": "#a7845f", "recipe": [6, 0, 0, 1, 0, 7, 0], "desc": "骆驼毛的浅褐"}, {"name": "翠绿", "hex": "#32a062", "recipe": [0, 0, 1, 14, 2, 1, 0], "desc": "两个黄鹂鸣翠柳"}, {"name": "茜色", "hex": "#d03254", "recipe": [1, 8, 1, 0, 0, 3, 0], "desc": "茜草根染出的红"}, {"name": "靛青", "hex": "#2d7cac", "recipe": [0, 0, 0, 1, 7, 2, 0], "desc": "蓼蓝草染出的深蓝"}, {"name": "桃红", "hex": "#ee7c84", "recipe": [2, 1, 0, 0, 0, 8, 0], "desc": "人面桃花相映红"}, {"name": "苍色", "hex": "#78878a", "recipe": [2, 1, 0, 5, 0, 10, 0], "desc": "苍山的灰青"}, {"name": "灰蓝", "hex": "#798fa6", "recipe": [1, 1, 0, 1, 2, 13, 0], "desc": "阴天的远山"}, {"name": "石青", "hex": "#3085a5", "recipe": [0, 0, 0, 4, 8, 3, 0], "desc": "国画颜料，用蓝铜矿研磨"}, {"name": "海棠红", "hex": "#e3546a", "recipe": [0, 5, 2, 0, 0, 9, 0], "desc": "知否，知否？应是绿肥红瘦"}, {"name": "松花", "hex": "#b8eb70", "recipe": [0, 0, 3, 1, 0, 14, 0], "desc": "春天松树的花粉"}, {"name": "银红", "hex": "#e65a55", "recipe": [7, 2, 0, 0, 0, 6, 0], "desc": "带一点粉的亮红"}, {"name": "水绿", "hex": "#86c2ad", "recipe": [1, 0, 0, 2, 1, 14, 0], "desc": "春水微绿"}, {"name": "栗色", "hex": "#632e24", "recipe": [0, 5, 8, 0, 0, 0, 3], "desc": "炒栗子的壳"}, {"name": "柳绿", "hex": "#96d458", "recipe": [0, 0, 5, 0, 1, 11, 0], "desc": "早春新柳"}, {"name": "豆绿", "hex": "#92d045", "recipe": [0, 0, 8, 0, 1, 9, 0], "desc": "刚剥出来的青豆"}, {"name": "杏黄", "hex": "#f5a436", "recipe": [2, 0, 8, 0, 0, 5, 0], "desc": "熟透的杏子"}, {"name": "姜黄", "hex": "#f7c168", "recipe": [1, 0, 2, 0, 0, 9, 0], "desc": "切开的老姜"}, {"name": "柿红", "hex": "#e75224", "recipe": [2, 0, 1, 0, 0, 0, 0], "desc": "挂在枝头的柿子"}, {"name": "绯红", "hex": "#d33422", "recipe": [0, 1, 2, 0, 0, 0, 0], "desc": "鲜亮的正红"}, {"name": "缃色", "hex": "#f7c449", "recipe": [1, 0, 7, 0, 0, 10, 0], "desc": "浅黄，古人包书卷的帛就是这个颜色"}, {"name": "秋香", "hex": "#bcad74", "recipe": [1, 0, 2, 0, 0, 14, 1], "desc": "秋天草木将黄未黄的颜色"}, {"name": "鹅黄", "hex": "#f8e84f", "recipe": [0, 0, 3, 0, 0, 5, 0], "desc": "刚出壳的小鹅绒毛的嫩黄"}, {"name": "烟灰", "hex": "#99a5a9", "recipe": [0, 0, 0, 1, 0, 15, 2], "desc": "炊烟一样的灰"}, {"name": "芦灰", "hex": "#b7a89c", "recipe": [1, 0, 0, 0, 0, 12, 1], "desc": "秋天的芦苇"}, {"name": "碧色", "hex": "#4ecba2", "recipe": [0, 0, 0, 2, 0, 1, 0], "desc": "接天莲叶无穷碧"}, {"name": "橘红", "hex": "#f0781e", "recipe": [2, 0, 7, 0, 0, 0, 0], "desc": "剥开的橘子皮"}, {"name": "紫檀", "hex": "#512b25", "recipe": [0, 3, 4, 0, 0, 0, 3], "desc": "紫檀木的深褐"}, {"name": "胭脂粉", "hex": "#f29aaf", "recipe": [1, 1, 0, 0, 0, 16, 0], "desc": "胭脂兑了水"}, {"name": "黄栌", "hex": "#f4a13e", "recipe": [2, 0, 5, 0, 0, 5, 0], "desc": "黄栌木染出的暖黄"}, {"name": "雪青", "hex": "#9f9dd3", "recipe": [0, 1, 0, 0, 1, 16, 0], "desc": "淡淡的蓝紫"}, {"name": "杨妃色", "hex": "#f39f99", "recipe": [0, 1, 1, 0, 0, 16, 0], "desc": "贵妃脸上淡淡的红"}, {"name": "宝蓝", "hex": "#4d5fa8", "recipe": [0, 3, 0, 0, 6, 8, 0], "desc": "像蓝宝石一样"}, {"name": "土黄", "hex": "#b9a160", "recipe": [2, 0, 3, 0, 0, 12, 1], "desc": "黄土高原"}, {"name": "丁香", "hex": "#bb9fd0", "recipe": [0, 1, 0, 1, 0, 16, 0], "desc": "丁香空结雨中愁"}, {"name": "紫棠", "hex": "#581f55", "recipe": [0, 9, 0, 0, 1, 0, 0], "desc": "紫得发黑"}];
+const PIGMENTS = [{"id":"red","name":"红","hex":"#e2452b","k":1},{"id":"rose","name":"玫红","hex":"#b81d52","k":1},{"id":"yellow","name":"黄","hex":"#f8c81c","k":1},{"id":"green","name":"绿","hex":"#2fae7a","k":1},{"id":"blue","name":"蓝","hex":"#1d5e9a","k":1},{"id":"white","name":"白","hex":"#f8f6f0","k":4},{"id":"black","name":"黑","hex":"#232125","k":0.5}];
+const COLORS = [{"name":"海带","hex":"#3a4a2a","recipe":[4,1,5,2,3,0,1],"desc":"一根海带","stars":3},{"name":"黑板","hex":"#2f4a3a","recipe":[0,0,2,3,3,1,5],"desc":"教室的黑板","stars":3},{"name":"绿皮火车","hex":"#2f5b3b","recipe":[0,0,3,4,4,1,3],"desc":"绿皮火车","stars":3},{"name":"海苔","hex":"#2e3a2a","recipe":[1,0,2,2,1,0,5],"desc":"一片海苔","stars":3},{"name":"菠菜","hex":"#3e6b35","recipe":[0,0,6,6,2,2,3],"desc":"一把菠菜","stars":3},{"name":"沼泽","hex":"#4a5a3a","recipe":[7,1,3,5,2,2,0],"desc":"沼泽","stars":3},{"name":"乒乓球台","hex":"#2a5a4a","recipe":[3,0,1,4,9,1,2],"desc":"乒乓球台","stars":3},{"name":"熊猫眼圈","hex":"#3a3a3b","recipe":[2,2,1,6,0,0,2],"desc":"熊猫的黑眼圈","stars":3},{"name":"茄子","hex":"#4a2946","recipe":[0,9,1,4,0,1,4],"desc":"茄子","stars":3},{"name":"鹦鹉","hex":"#49a14a","recipe":[1,0,2,7,0,2,0],"desc":"一只绿鹦鹉","stars":3},{"name":"海藻","hex":"#4a5a2a","recipe":[0,2,11,4,2,1,0],"desc":"海藻","stars":3},{"name":"蓝莓酱","hex":"#3f2b55","recipe":[0,11,1,3,4,1,0],"desc":"抹在吐司上的蓝莓酱","stars":3},{"name":"墨水","hex":"#292f59","recipe":[0,5,0,3,6,0,2],"desc":"蓝黑墨水","stars":3},{"name":"木耳","hex":"#3a2a28","recipe":[2,3,3,1,0,0,9],"desc":"泡发的木耳","stars":3},{"name":"葡萄汁","hex":"#5a2a4a","recipe":[0,11,1,2,0,2,4],"desc":"一杯葡萄汁","stars":3},{"name":"藏青西装","hex":"#2a3550","recipe":[0,5,1,0,10,1,3],"desc":"一套藏青西装","stars":3},{"name":"邮筒","hex":"#246f3f","recipe":[0,0,1,1,3,0,0],"desc":"街边的绿邮筒","stars":3},{"name":"红豆沙","hex":"#6e3435","recipe":[0,5,4,2,0,1,0],"desc":"熬得沙沙的红豆","stars":3},{"name":"酸梅汤","hex":"#692a2a","recipe":[4,7,5,0,0,0,3],"desc":"冰镇酸梅汤","stars":3},{"name":"水獭","hex":"#6a4a3a","recipe":[3,3,5,2,0,4,3],"desc":"水獭","stars":3},{"name":"夜空","hex":"#2a2a4b","recipe":[0,6,0,2,6,0,5],"desc":"夜空","stars":3},{"name":"糖炒栗子","hex":"#6f4128","recipe":[5,2,7,0,0,1,3],"desc":"糖炒栗子的壳","stars":3},{"name":"金枪鱼","hex":"#d83c44","recipe":[0,5,3,0,0,3,0],"desc":"一块金枪鱼","stars":3},{"name":"冲锋衣","hex":"#3b796a","recipe":[4,0,0,3,8,5,0],"desc":"一件冲锋衣","stars":3},{"name":"苔藓绿","hex":"#5a6a2a","recipe":[7,0,8,3,1,1,0],"desc":"墙角的苔藓","stars":3},{"name":"海星","hex":"#ef8136","recipe":[0,1,9,0,0,5,0],"desc":"沙滩上的海星","stars":3},{"name":"热可可","hex":"#6b4630","recipe":[1,4,9,0,1,3,2],"desc":"冬天捧在手里的热可可","stars":3},{"name":"皮带","hex":"#794a2c","recipe":[6,2,6,2,0,1,0],"desc":"一条皮带","stars":3},{"name":"红酒","hex":"#692330","recipe":[0,8,3,0,0,0,2],"desc":"杯子里的红酒","stars":3},{"name":"黑糖","hex":"#5b3424","recipe":[1,5,10,0,1,0,2],"desc":"一块黑糖","stars":3},{"name":"桑葚","hex":"#4a1f3b","recipe":[1,10,0,0,0,0,6],"desc":"一把桑葚","stars":3},{"name":"日落","hex":"#e8653b","recipe":[0,3,10,0,0,7,0],"desc":"太阳快落山的时候","stars":3},{"name":"普洱","hex":"#5f3123","recipe":[0,5,10,0,0,0,4],"desc":"泡了很久的普洱","stars":3},{"name":"黄瓜皮","hex":"#4a6b3a","recipe":[5,0,4,2,3,3,1],"desc":"黄瓜的皮","stars":3},{"name":"柿子","hex":"#ec742b","recipe":[1,1,11,0,0,3,0],"desc":"熟透的柿子","stars":3},{"name":"火山灰","hex":"#5a5654","recipe":[0,3,3,2,2,7,3],"desc":"火山灰","stars":3},{"name":"玫瑰","hex":"#ca2b48","recipe":[0,5,1,0,0,1,0],"desc":"一枝红玫瑰","stars":3},{"name":"美式","hex":"#4b2f22","recipe":[0,4,9,0,0,0,7],"desc":"一杯不加糖的黑咖啡","stars":3},{"name":"西瓜瓤","hex":"#e3525c","recipe":[7,4,0,0,0,8,0],"desc":"西瓜正中间那一勺","stars":3},{"name":"咸蛋黄","hex":"#f28c2f","recipe":[2,0,5,0,0,2,0],"desc":"流油的咸蛋黄","stars":3},{"name":"紫米粥","hex":"#5a3a4a","recipe":[0,5,2,1,1,3,2],"desc":"一碗紫米粥","stars":3},{"name":"牛仔裤","hex":"#3e5a7f","recipe":[0,2,0,5,5,5,2],"desc":"新买的牛仔裤","stars":3},{"name":"指甲油","hex":"#d63a55","recipe":[1,5,1,0,0,3,0],"desc":"一瓶指甲油","stars":3},{"name":"蜂鸟","hex":"#38896a","recipe":[1,0,0,6,1,1,0],"desc":"蜂鸟","stars":3},{"name":"珍珠","hex":"#3b2b23","recipe":[0,3,6,0,0,0,10],"desc":"奶茶杯底的黑珍珠","stars":3},{"name":"乌龟","hex":"#5a6a3a","recipe":[0,0,4,2,0,3,3],"desc":"乌龟壳","stars":3},{"name":"黑巧克力","hex":"#422a24","recipe":[0,2,3,0,0,0,4],"desc":"苦到皱眉的那种","stars":3},{"name":"呢子大衣","hex":"#594a4a","recipe":[1,5,4,1,3,5,0],"desc":"一件呢子大衣","stars":3},{"name":"翡翠","hex":"#388a5a","recipe":[1,0,1,6,3,2,0],"desc":"一块翡翠","stars":3},{"name":"雷雨","hex":"#3e4a5b","recipe":[0,1,0,0,4,5,8],"desc":"雷雨前的天","stars":3},{"name":"摩卡","hex":"#8a5e48","recipe":[7,1,2,0,0,7,3],"desc":"一杯摩卡","stars":3},{"name":"杨梅","hex":"#78203a","recipe":[1,15,2,0,0,0,2],"desc":"一颗杨梅","stars":3},{"name":"军绿","hex":"#5a5f3a","recipe":[10,0,1,3,1,2,0],"desc":"一件军绿外套","stars":3},{"name":"核桃","hex":"#8a6441","recipe":[4,1,5,0,0,7,3],"desc":"一颗核桃","stars":3},{"name":"深海","hex":"#203a5a","recipe":[0,1,0,0,7,0,2],"desc":"深海","stars":3},{"name":"红丝绒","hex":"#8e2935","recipe":[9,9,1,1,0,0,0],"desc":"红丝绒蛋糕的切面","stars":3},{"name":"羽绒服","hex":"#3a4a6b","recipe":[0,1,0,3,1,1,1],"desc":"一件深蓝羽绒服","stars":3},{"name":"青椒","hex":"#4b893a","recipe":[1,0,6,7,1,3,1],"desc":"一个青椒","stars":3},{"name":"香菇","hex":"#7a5a3e","recipe":[2,2,6,1,0,6,3],"desc":"一朵香菇","stars":3},{"name":"葡萄","hex":"#5d3b5e","recipe":[1,4,0,0,1,3,2],"desc":"一大串紫葡萄","stars":3},{"name":"校服","hex":"#39599d","recipe":[0,2,0,1,7,4,0],"desc":"蓝白校服的蓝","stars":3},{"name":"松果","hex":"#895a3a","recipe":[4,1,4,0,0,4,2],"desc":"一颗松果","stars":3},{"name":"孔雀","hex":"#296a7a","recipe":[0,0,0,5,6,1,1],"desc":"孔雀","stars":3},{"name":"西兰花","hex":"#4f7a3a","recipe":[3,0,6,2,3,4,1],"desc":"一朵西兰花","stars":3},{"name":"柏油路","hex":"#4a4a4b","recipe":[5,2,0,5,1,2,1],"desc":"柏油马路","stars":3},{"name":"李子","hex":"#7b2e4c","recipe":[2,9,1,2,0,2,0],"desc":"紫红的李子","stars":3},{"name":"荷叶","hex":"#5a894a","recipe":[4,0,4,0,4,7,0],"desc":"荷叶","stars":3},{"name":"老木门","hex":"#7a5230","recipe":[6,1,6,0,0,3,3],"desc":"一扇老木门","stars":3},{"name":"游泳圈","hex":"#eb6a5a","recipe":[7,1,0,0,0,7,0],"desc":"红白游泳圈的红","stars":3},{"name":"暴风雨","hex":"#4a5050","recipe":[4,1,0,2,2,4,4],"desc":"暴风雨","stars":3},{"name":"橘猫","hex":"#f49834","recipe":[3,0,9,0,0,5,0],"desc":"一只胖橘猫","stars":3},{"name":"红砖","hex":"#a24a33","recipe":[0,5,10,1,0,4,0],"desc":"红砖墙","stars":3},{"name":"仙人掌","hex":"#5b8a5a","recipe":[0,0,3,0,3,8,2],"desc":"仙人掌","stars":3},{"name":"工装裤","hex":"#7a6a4a","recipe":[3,1,3,0,1,6,1],"desc":"一条工装裤","stars":3},{"name":"竹林","hex":"#5b7a4a","recipe":[1,1,4,5,1,5,0],"desc":"一片竹林","stars":3},{"name":"树皮","hex":"#6b5a4a","recipe":[8,0,0,1,0,6,5],"desc":"老树的皮","stars":3},{"name":"操场草皮","hex":"#589948","recipe":[0,0,5,3,2,6,1],"desc":"操场的草皮","stars":3},{"name":"铜绿","hex":"#599a8a","recipe":[1,0,0,7,1,8,1],"desc":"旧铜器上的绿锈","stars":3},{"name":"蕨","hex":"#5a8b3a","recipe":[3,0,6,2,2,4,0],"desc":"一片蕨","stars":3},{"name":"红枣","hex":"#8b2a2a","recipe":[3,7,5,0,0,0,1],"desc":"一颗红枣","stars":4},{"name":"甜菜根","hex":"#8c2848","recipe":[4,10,0,1,0,1,0],"desc":"甜菜根","stars":4},{"name":"青苔","hex":"#6b7b3b","recipe":[1,0,5,2,0,4,2],"desc":"石头上的青苔","stars":4},{"name":"蓝莓","hex":"#4f5d8e","recipe":[0,3,0,11,0,5,0],"desc":"表面带一层白霜的蓝莓","stars":4},{"name":"树莓","hex":"#c5264e","recipe":[2,9,0,0,0,1,0],"desc":"刚摘下来的树莓","stars":4},{"name":"巧克力冰淇淋","hex":"#794d3a","recipe":[7,1,1,1,0,2,1],"desc":"一球巧克力冰淇淋","stars":4},{"name":"牛肝菌","hex":"#896a4a","recipe":[2,2,5,2,0,8,1],"desc":"一朵牛肝菌","stars":4},{"name":"红茶","hex":"#9a4a23","recipe":[0,3,14,0,0,1,1],"desc":"一杯红茶","stars":4},{"name":"南瓜汤","hex":"#f5a63f","recipe":[1,0,3,0,0,3,0],"desc":"一碗热乎乎的南瓜汤","stars":4},{"name":"青蛙","hex":"#6a9a3b","recipe":[0,0,6,3,0,4,1],"desc":"荷叶上的青蛙","stars":4},{"name":"翠鸟","hex":"#318e98","recipe":[0,0,0,10,7,3,0],"desc":"一闪而过的翠鸟","stars":4},{"name":"秋葵","hex":"#6a8a4a","recipe":[0,1,7,0,3,9,0],"desc":"一根秋葵","stars":4},{"name":"湖水","hex":"#4c8e8a","recipe":[0,0,0,10,1,7,2],"desc":"山里的湖","stars":4},{"name":"红烧肉","hex":"#893a24","recipe":[2,4,9,1,0,0,0],"desc":"红烧肉的酱色","stars":4},{"name":"热带鱼","hex":"#3b9f9f","recipe":[0,0,0,9,4,4,0],"desc":"一条热带鱼","stars":4},{"name":"斑马","hex":"#59595a","recipe":[2,2,1,6,0,5,2],"desc":"斑马","stars":4},{"name":"草地","hex":"#68a94e","recipe":[1,0,3,2,1,5,0],"desc":"一片草地","stars":4},{"name":"卤蛋","hex":"#895930","recipe":[8,0,2,1,0,1,0],"desc":"卤了一夜的蛋","stars":4},{"name":"三文鱼","hex":"#f28a58","recipe":[5,0,1,0,0,7,0],"desc":"一片三文鱼","stars":4},{"name":"鸢尾","hex":"#69589e","recipe":[0,5,0,3,2,10,0],"desc":"一朵鸢尾花","stars":4},{"name":"西瓜汁","hex":"#eb6c6b","recipe":[6,2,0,0,0,11,0],"desc":"鲜榨西瓜汁","stars":4},{"name":"杜鹃","hex":"#dc4379","recipe":[1,5,0,0,0,5,0],"desc":"满山的杜鹃","stars":4},{"name":"蝴蝶","hex":"#4c6ab1","recipe":[0,1,0,0,3,4,0],"desc":"一只蓝蝴蝶","stars":4},{"name":"橄榄","hex":"#7a7a3b","recipe":[7,0,5,1,1,5,0],"desc":"一颗橄榄","stars":4},{"name":"花盆","hex":"#b16241","recipe":[0,3,8,0,0,8,1],"desc":"一个红陶花盆","stars":4},{"name":"啤酒","hex":"#f5aa33","recipe":[1,0,6,0,0,3,0],"desc":"一杯啤酒","stars":4},{"name":"抹茶","hex":"#7c8f3e","recipe":[4,0,6,1,1,6,0],"desc":"刚刷开的一碗抹茶","stars":4},{"name":"珊瑚","hex":"#ef7b6a","recipe":[7,1,0,0,0,12,0],"desc":"珊瑚","stars":4},{"name":"乌云","hex":"#595f70","recipe":[1,3,1,5,2,7,0],"desc":"快下雨的云","stars":4},{"name":"军舰灰","hex":"#6a7077","recipe":[2,1,0,2,1,7,1],"desc":"军舰的灰","stars":4},{"name":"瓦片","hex":"#5b6060","recipe":[0,1,1,4,0,6,4],"desc":"屋顶的瓦片","stars":4},{"name":"紫薯","hex":"#6c3f7a","recipe":[1,9,0,1,2,7,0],"desc":"蒸好掰开的紫薯","stars":4},{"name":"猫头鹰","hex":"#8b7a59","recipe":[5,1,2,3,0,9,0],"desc":"猫头鹰","stars":4},{"name":"白灼虾","hex":"#f08a6b","recipe":[1,1,2,0,0,10,0],"desc":"煮熟的虾","stars":4},{"name":"哈密瓜","hex":"#f5a85b","recipe":[2,0,2,0,0,7,0],"desc":"哈密瓜的果肉","stars":4},{"name":"巧克力奶","hex":"#a0785f","recipe":[7,0,0,0,0,10,2],"desc":"一盒巧克力奶","stars":4},{"name":"蛋黄","hex":"#f6b639","recipe":[1,0,7,0,0,5,0],"desc":"溏心蛋的蛋黄","stars":4},{"name":"蔓越莓","hex":"#a2304a","recipe":[0,12,3,0,0,4,1],"desc":"蔓越莓干","stars":4},{"name":"积木","hex":"#3e79b4","recipe":[0,1,0,1,10,8,0],"desc":"一块蓝积木","stars":4},{"name":"红土","hex":"#a75232","recipe":[3,3,9,0,0,4,1],"desc":"红土地","stars":4},{"name":"陶罐","hex":"#b6714c","recipe":[1,2,6,0,0,10,1],"desc":"一个陶罐","stars":4},{"name":"西柚","hex":"#ef7b62","recipe":[6,1,1,0,0,11,0],"desc":"西柚的果肉","stars":4},{"name":"灯芯绒","hex":"#986949","recipe":[2,2,5,1,0,8,1],"desc":"灯芯绒外套","stars":4},{"name":"格子衬衫","hex":"#a74b4a","recipe":[9,3,0,0,0,5,1],"desc":"红格子衬衫","stars":4},{"name":"浅海","hex":"#62c3c4","recipe":[0,0,0,2,1,5,0],"desc":"能看见底的浅海","stars":4},{"name":"苔原","hex":"#7b8b5d","recipe":[0,0,3,2,0,10,3],"desc":"苔原","stars":4},{"name":"肉桂","hex":"#a75931","recipe":[4,2,9,0,0,4,1],"desc":"一撮肉桂粉","stars":4},{"name":"跑道","hex":"#af5541","recipe":[1,4,7,0,0,7,1],"desc":"学校的塑胶跑道","stars":4},{"name":"火龙果","hex":"#cf306a","recipe":[1,14,0,0,0,5,0],"desc":"红心火龙果","stars":4},{"name":"紫水晶","hex":"#895aa3","recipe":[0,5,0,1,1,11,0],"desc":"一块紫水晶","stars":4},{"name":"青砖","hex":"#69706f","recipe":[0,1,1,4,0,10,4],"desc":"老房子的青砖","stars":4},{"name":"桂圆","hex":"#9a6938","recipe":[5,0,3,0,0,3,1],"desc":"桂圆干","stars":4},{"name":"腐乳","hex":"#b0514b","recipe":[1,5,5,0,0,8,1],"desc":"一块红腐乳","stars":4},{"name":"枯叶","hex":"#997b4b","recipe":[5,0,1,1,0,4,0],"desc":"一片枯叶","stars":4},{"name":"毛豆","hex":"#7ea24a","recipe":[3,0,5,4,0,8,0],"desc":"煮好的毛豆","stars":4},{"name":"无花果","hex":"#8b596d","recipe":[0,3,1,0,0,9,3],"desc":"无花果的皮","stars":4},{"name":"玉米","hex":"#f7c84e","recipe":[1,0,7,0,0,12,0],"desc":"一根煮玉米","stars":4},{"name":"泳池","hex":"#68c1d1","recipe":[0,0,0,2,3,13,0],"desc":"泳池","stars":4},{"name":"蓝牛仔外套","hex":"#586f8f","recipe":[1,2,0,6,2,8,0],"desc":"牛仔外套","stars":4},{"name":"芹菜","hex":"#8ab66b","recipe":[0,0,3,3,0,13,1],"desc":"芹菜梗","stars":4},{"name":"青豆","hex":"#87aa59","recipe":[0,0,4,0,1,10,1],"desc":"一把青豆","stars":4},{"name":"焦糖","hex":"#ab6631","recipe":[0,2,12,0,0,5,1],"desc":"糖在锅里熬到冒泡","stars":4},{"name":"牵牛花","hex":"#7b69b2","recipe":[0,3,0,0,2,11,0],"desc":"一朵牵牛花","stars":4},{"name":"大海","hex":"#346f9a","recipe":[0,1,0,7,8,4,0],"desc":"大海","stars":4},{"name":"奶油南瓜","hex":"#f6bb72","recipe":[1,0,1,0,0,7,0],"desc":"奶油南瓜的果肉","stars":4},{"name":"猕猴桃","hex":"#8aac3f","recipe":[0,0,9,2,0,8,1],"desc":"猕猴桃的果肉","stars":4},{"name":"瓷砖绿","hex":"#76ae9d","recipe":[2,0,0,0,3,15,0],"desc":"老房子厨房的瓷砖","stars":4},{"name":"河水","hex":"#6a897a","recipe":[2,0,0,5,0,9,2],"desc":"河水","stars":4},{"name":"花生酱","hex":"#af7a3d","recipe":[1,1,8,0,0,7,1],"desc":"一勺花生酱","stars":4},{"name":"落叶","hex":"#b47946","recipe":[3,1,6,0,0,9,1],"desc":"秋天的落叶","stars":4},{"name":"橡皮泥","hex":"#7dbd49","recipe":[1,0,6,4,0,8,0],"desc":"一团绿橡皮泥","stars":4},{"name":"奶黄包","hex":"#f7cd65","recipe":[1,0,4,0,0,15,0],"desc":"奶黄包的馅","stars":4},{"name":"砂纸","hex":"#a39777","recipe":[1,1,2,2,0,14,0],"desc":"一张砂纸","stars":4},{"name":"瑜伽垫","hex":"#8c7ab5","recipe":[0,2,0,3,0,11,0],"desc":"一张瑜伽垫","stars":4},{"name":"水蜜桃","hex":"#f3a285","recipe":[0,1,2,0,0,17,0],"desc":"水蜜桃红红的脸","stars":4},{"name":"肥皂","hex":"#bed0b6","recipe":[1,0,0,1,0,18,0],"desc":"一块香皂","stars":4},{"name":"旧铁皮","hex":"#7a7a6f","recipe":[1,1,1,3,0,8,1],"desc":"旧铁皮","stars":4},{"name":"木地板","hex":"#a67240","recipe":[6,0,3,0,0,5,1],"desc":"木地板","stars":4},{"name":"旧牛仔","hex":"#6a84a8","recipe":[0,1,0,2,2,11,1],"desc":"洗得发白的牛仔裤","stars":4},{"name":"吐司边","hex":"#b8864e","recipe":[1,1,6,0,0,11,1],"desc":"烤得刚好的吐司边","stars":5},{"name":"奶茶","hex":"#bd9870","recipe":[4,0,1,0,0,14,1],"desc":"一杯半糖奶茶","stars":5},{"name":"焦糖布丁","hex":"#b68846","recipe":[0,1,8,0,0,10,1],"desc":"布丁顶上亮晶晶那层","stars":5},{"name":"玫瑰花茶","hex":"#b8606b","recipe":[1,4,2,0,0,12,1],"desc":"泡开的玫瑰花茶","stars":5},{"name":"紫洋葱","hex":"#9c597c","recipe":[2,4,0,1,0,10,1],"desc":"一圈紫洋葱","stars":5},{"name":"芒果冰沙","hex":"#f7c872","recipe":[1,0,2,0,0,12,0],"desc":"一大杯芒果冰沙","stars":5},{"name":"薄荷糖","hex":"#99ccb0","recipe":[1,0,0,3,0,16,0],"desc":"一颗薄荷糖","stars":5},{"name":"南瓜子","hex":"#c2bf98","recipe":[0,0,1,0,0,18,1],"desc":"南瓜子仁","stars":5},{"name":"沙滩","hex":"#f7d094","recipe":[1,0,1,0,0,18,0],"desc":"沙滩","stars":5},{"name":"月光","hex":"#bdbfa1","recipe":[2,0,0,1,0,17,0],"desc":"地上的月光","stars":5},{"name":"冰沙","hex":"#acbec0","recipe":[0,0,0,1,0,18,1],"desc":"一杯冰沙","stars":5},{"name":"兔子","hex":"#c2b4a9","recipe":[1,0,0,0,0,18,1],"desc":"一只灰兔子","stars":5},{"name":"青柠","hex":"#9cc34a","recipe":[1,0,7,2,0,10,0],"desc":"切开的青柠","stars":5},{"name":"眼影","hex":"#a57a68","recipe":[2,1,1,1,0,7,0],"desc":"大地色眼影","stars":5},{"name":"毛线","hex":"#ba6d69","recipe":[0,3,3,0,0,13,1],"desc":"一团红毛线","stars":5},{"name":"薰衣草","hex":"#9a93c3","recipe":[0,1,0,2,0,11,0],"desc":"薰衣草","stars":5},{"name":"柳条","hex":"#9baf59","recipe":[0,0,4,1,0,10,1],"desc":"刚发芽的柳条","stars":5},{"name":"蜜桃乌龙","hex":"#f6b37e","recipe":[3,0,1,0,0,16,0],"desc":"蜜桃乌龙茶","stars":5},{"name":"草莓冰淇淋","hex":"#f39eb2","recipe":[1,1,0,0,0,18,0],"desc":"一球草莓冰淇淋","stars":5},{"name":"火烈鸟","hex":"#f08998","recipe":[0,2,1,0,0,17,0],"desc":"一条腿站着的火烈鸟","stars":5},{"name":"小猪","hex":"#f3a39d","recipe":[0,1,1,0,0,18,0],"desc":"小猪","stars":5},{"name":"水母","hex":"#bea3d2","recipe":[0,1,0,1,0,18,0],"desc":"透明的水母","stars":5},{"name":"紫薯酸奶","hex":"#c197bb","recipe":[0,1,0,0,0,18,1],"desc":"紫薯酸奶","stars":5},{"name":"焦糖玛奇朵","hex":"#ba8459","recipe":[2,1,4,0,0,12,1],"desc":"上面淋着焦糖","stars":5},{"name":"榨菜","hex":"#9a994c","recipe":[2,0,5,1,0,9,1],"desc":"一小碟榨菜","stars":5},{"name":"黄铜","hex":"#b3983c","recipe":[2,0,9,0,0,8,1],"desc":"一把黄铜钥匙","stars":5},{"name":"青香蕉","hex":"#b6c752","recipe":[1,0,6,1,0,12,0],"desc":"还没熟透的香蕉","stars":5},{"name":"岩石","hex":"#898075","recipe":[1,1,1,0,1,8,0],"desc":"一块岩石","stars":5},{"name":"蜗牛","hex":"#aa8459","recipe":[1,1,3,1,0,8,0],"desc":"蜗牛壳","stars":5},{"name":"奶咖","hex":"#bfa28b","recipe":[3,0,0,0,0,16,1],"desc":"奶多咖啡少","stars":5},{"name":"阴天","hex":"#9da9ad","recipe":[0,0,0,1,0,17,2],"desc":"阴天","stars":5},{"name":"雪顶咖啡","hex":"#be9a80","recipe":[4,0,0,0,0,15,1],"desc":"冰淇淋化在咖啡里","stars":5},{"name":"麻布","hex":"#baa885","recipe":[4,0,0,1,0,15,0],"desc":"一块麻布","stars":5},{"name":"橄榄油","hex":"#b7a645","recipe":[1,0,8,0,0,10,1],"desc":"一勺橄榄油","stars":5},{"name":"狗尾巴草","hex":"#a5a769","recipe":[2,0,1,1,0,7,0],"desc":"路边的狗尾巴草","stars":5},{"name":"雨后","hex":"#7a898a","recipe":[0,1,1,0,2,13,1],"desc":"雨后的街","stars":5},{"name":"黄昏","hex":"#bc7d6c","recipe":[0,2,3,0,0,14,1],"desc":"天快黑的时候","stars":5},{"name":"薄荷巧克力","hex":"#81c3ad","recipe":[1,0,0,3,1,15,0],"desc":"薄荷巧克力冰淇淋","stars":5},{"name":"绣球花","hex":"#879ad1","recipe":[0,1,0,0,2,16,0],"desc":"蓝紫色的绣球花","stars":5},{"name":"章鱼","hex":"#ba6a75","recipe":[2,3,1,0,0,13,1],"desc":"一只章鱼","stars":5},{"name":"紫藤","hex":"#a287c7","recipe":[0,2,0,0,1,17,0],"desc":"一架紫藤花","stars":5},{"name":"勿忘我","hex":"#7898cf","recipe":[0,1,0,0,3,16,0],"desc":"勿忘我","stars":5},{"name":"荞麦面","hex":"#897a6c","recipe":[0,1,2,1,0,12,3],"desc":"一碗荞麦面","stars":5},{"name":"鸽子","hex":"#8f91a2","recipe":[1,1,0,3,0,12,0],"desc":"广场上的鸽子","stars":5},{"name":"脏粉","hex":"#b68a88","recipe":[3,1,0,1,0,13,0],"desc":"带点灰的粉","stars":5},{"name":"生菜","hex":"#a3ca78","recipe":[1,0,2,2,0,14,0],"desc":"一片生菜","stars":5},{"name":"花生","hex":"#bb9664","recipe":[4,0,2,0,0,13,1],"desc":"一把花生","stars":5},{"name":"大象","hex":"#858785","recipe":[1,0,0,1,0,14,4],"desc":"大象","stars":5},{"name":"绿茶","hex":"#b8b95e","recipe":[2,0,4,1,0,13,0],"desc":"泡开的绿茶","stars":5},{"name":"青芥末","hex":"#a3b66b","recipe":[0,0,3,1,0,13,1],"desc":"生鱼片旁边那一小坨","stars":5},{"name":"风衣","hex":"#b69a6d","recipe":[0,1,3,1,0,13,0],"desc":"一件风衣","stars":5},{"name":"牛油果","hex":"#b5c766","recipe":[1,0,3,1,0,12,0],"desc":"切开的牛油果","stars":5},{"name":"抹茶冰淇淋","hex":"#b8cb8a","recipe":[1,0,1,1,0,14,0],"desc":"一球抹茶冰淇淋","stars":5},{"name":"抹茶拿铁","hex":"#a7ba7c","recipe":[0,0,2,1,0,15,1],"desc":"抹茶兑了牛奶，搅匀了","stars":5},{"name":"灰粉","hex":"#c09693","recipe":[0,1,1,0,0,17,1],"desc":"灰调的粉","stars":5},{"name":"绿豆汤","hex":"#b4b67b","recipe":[2,0,1,1,0,12,0],"desc":"夏天的绿豆汤","stars":5},{"name":"干草堆","hex":"#beb06b","recipe":[1,0,3,0,0,15,1],"desc":"干草堆","stars":5},{"name":"芦苇","hex":"#c1b38b","recipe":[1,0,1,0,0,17,1],"desc":"秋天的芦苇","stars":5},{"name":"土豆","hex":"#bea077","recipe":[3,0,1,0,0,15,1],"desc":"带皮的土豆","stars":5},{"name":"豆沙","hex":"#b6807a","recipe":[0,2,2,1,0,13,0],"desc":"不张扬的灰粉，口红里常见","stars":5},{"name":"多肉","hex":"#90b59a","recipe":[2,0,0,1,1,14,0],"desc":"窗台上的多肉","stars":5},{"name":"桔梗","hex":"#777ab4","recipe":[0,2,0,3,1,11,0],"desc":"桔梗花","stars":5},{"name":"芋泥","hex":"#aa96b7","recipe":[0,1,0,1,0,17,1],"desc":"压成泥的芋头，淡淡的紫","stars":5},{"name":"蘑菇","hex":"#bba082","recipe":[0,1,2,1,0,16,0],"desc":"一朵蘑菇","stars":5},{"name":"鹅卵石","hex":"#a7a098","recipe":[0,1,1,2,0,16,0],"desc":"河边的鹅卵石","stars":5},{"name":"雾紫","hex":"#a69aac","recipe":[1,1,0,2,0,16,0],"desc":"雾蒙蒙的紫","stars":5},{"name":"莫兰迪绿","hex":"#98a792","recipe":[2,0,0,2,0,15,1],"desc":"加了灰的绿，很安静","stars":5},{"name":"莫兰迪粉","hex":"#bda29b","recipe":[0,1,1,1,0,17,0],"desc":"加了灰的粉","stars":5},{"name":"麦穗","hex":"#bea771","recipe":[2,0,2,0,0,15,1],"desc":"一根麦穗","stars":5},{"name":"水泥","hex":"#9c9995","recipe":[0,1,1,0,1,14,0],"desc":"水泥墙","stars":5},{"name":"香芋冰淇淋","hex":"#987eac","recipe":[0,2,0,2,0,15,1],"desc":"香芋味的冰淇淋","stars":5},{"name":"老鼠","hex":"#8b8480","recipe":[0,1,1,2,0,10,1],"desc":"一只小灰鼠","stars":5},{"name":"海豚","hex":"#778898","recipe":[1,1,0,3,1,13,1],"desc":"海豚","stars":5},{"name":"拿铁","hex":"#b69474","recipe":[1,1,2,1,0,13,0],"desc":"咖啡和牛奶差不多一半一半","stars":5},{"name":"雾霾蓝","hex":"#7f94a6","recipe":[1,1,0,3,1,14,0],"desc":"灰灰的蓝","stars":5},{"name":"石板路","hex":"#8a8a7f","recipe":[1,1,1,3,0,13,1],"desc":"下过雨的石板路","stars":5},{"name":"薄暮","hex":"#887898","recipe":[1,2,0,1,1,14,1],"desc":"太阳下山后的那会儿","stars":5}];
 const MAX_DROPS = 24, TRIES = 6, PASS = 97;
 const $ = id => document.getElementById(id);
 const el = (t, c, x) => { const e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; };
@@ -229,18 +242,33 @@ function hints(mixLab, tLab){
 const lerpLin = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
 
 /* ================= 今天是哪一题 ================= */
+// 一周里越往后越难：周一周二 3 星，周三到周五 4 星，周末 5 星
 const START = Date.UTC(2026, 9, 4);
 function dayNo(d = new Date()){ return Math.floor((Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) - START) / 864e5) + 1; }
+const weekday = n => new Date(START + (n - 1) * 864e5).getUTCDay();
+const starsOf = n => { const w = weekday(n); return w === 0 || w === 6 ? 5 : w >= 3 ? 4 : 3; };
 function seeded(seed){ let a = seed >>> 0; return () => { a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
-const ORDER = (() => { const r = seeded(20261004), idx = COLORS.map((_, i) => i); for (let i = idx.length - 1; i > 0; i--){ const j = Math.floor(r() * (i + 1)); [idx[i], idx[j]] = [idx[j], idx[i]]; } return idx; })();
+const ORDER = {};
+for (const s of [3, 4, 5]){
+  const r = seeded(20261004 + s), idx = COLORS.map((c, i) => (c.stars === s ? i : -1)).filter(i => i >= 0);
+  for (let i = idx.length - 1; i > 0; i--){ const j = Math.floor(r() * (i + 1)); [idx[i], idx[j]] = [idx[j], idx[i]]; }
+  ORDER[s] = idx;
+}
 const TODAY = Math.max(1, dayNo());
-const todayColor = () => COLORS[ORDER[(TODAY - 1) % COLORS.length]];
+function colorOfDay(n){
+  const s = starsOf(n);
+  let k = 0;
+  for (let d = 1; d < n; d++) if (starsOf(d) === s) k++;
+  return COLORS[ORDER[s][k % ORDER[s].length]];
+}
+const STAR_TXT = {3: '有点难', 4: '挺难', 5: '超难'};
 
 /* ================= 状态 ================= */
 let S = null;
 function newRound(practice){
-  const c = practice ? COLORS[Math.floor(Math.random() * COLORS.length)] : todayColor();
-  const saved = !practice && store.get('day:' + TODAY, null);
+  const c = practice ? COLORS[Math.floor(Math.random() * COLORS.length)] : colorOfDay(TODAY);
+  let saved = !practice && store.get('day:' + TODAY, null);
+  if (saved && saved.name !== c.name) saved = null;
   S = {practice, color: c, tLin: hexToRgb(c.hex).map(toLin), counts: PIGMENTS.map(() => 0), history: [], tries: [], done: false};
   S.tLab = linToLab(S.tLin);
   if (saved){ S.counts = saved.counts; S.history = saved.history || []; S.tries = saved.tries; S.done = saved.done; }
@@ -251,23 +279,29 @@ function newRound(practice){
 }
 const dropsUsed = () => S.counts.reduce((a, b) => a + b, 0);
 const mixed = () => mix(S.counts);
-function save(){ if (!S.practice) store.set('day:' + TODAY, {counts: S.counts, history: S.history, tries: S.tries, done: S.done}); }
+function save(){ if (!S.practice) store.set('day:' + TODAY, {name: S.color.name, counts: S.counts, history: S.history, tries: S.tries, done: S.done}); }
 
 /* ================= 画面 ================= */
+function diffEl(stars){
+  const box = el('div', 'diff'), dots = el('div', 'dots');
+  for (let k = 0; k < 5; k++) dots.appendChild(el('i', k < stars ? 'on' : ''));
+  box.append(dots, el('span', '', STAR_TXT[stars]));
+  box.setAttribute('aria-label', `难度 ${stars} 星`);
+  return box;
+}
 function render(){
-  const c = S.color, light = linToLab(S.tLin)[0] > 62;
-  const t = $('target');
-  t.style.backgroundColor = c.hex;
-  t.className = 'target ' + (light ? 'light' : 'dark');
+  const c = S.color;
+  $('tSw').style.backgroundColor = c.hex;
   $('tName').textContent = c.name;
   $('tDesc').textContent = c.desc;
   $('tHex').textContent = S.done ? c.hex.toUpperCase() : '';
-  $('sub').textContent = S.practice ? '练习 · 随便调，不计分' : `第 ${TODAY} 期 · ${new Date().getMonth() + 1}月${new Date().getDate()}日`;
+  $('tDiff').replaceWith(Object.assign(diffEl(c.stars), {id: 'tDiff'}));
+  $('sub').textContent = S.practice ? '练习 · 不计分' : `第 ${TODAY} 期 · ${new Date().getMonth() + 1}月${new Date().getDate()}日`;
   $('title').textContent = S.practice ? '练一练' : '今日一色';
   renderDishes();
   renderTries();
   const used = dropsUsed();
-  $('count').textContent = `${used} / ${MAX_DROPS} 滴`;
+  $('count').innerHTML = `<b>${used}</b> / ${MAX_DROPS} 滴`;
   $('bowlNote').hidden = used > 0;
   $('btnUndo').disabled = !S.history.length || S.done;
   $('btnPour').disabled = !used || S.done;
@@ -279,7 +313,7 @@ function renderDishes(){
   const box = $('dishes');
   box.replaceChildren();
   PIGMENTS.forEach((p, i) => {
-    const b = el('button', 'dish');
+    const b = el('button', 'dish' + (p.id === 'white' ? ' white' : ''));
     b.type = 'button';
     b.style.setProperty('--c', p.hex);
     b.setAttribute('aria-label', `${p.name}，已经滴了 ${S.counts[i]} 滴`);
@@ -309,36 +343,27 @@ function renderTries(){
 
 /* ---------- 碗 ---------- */
 const cv = $('bowl'), ctx = cv.getContext('2d');
-let shown = null, blobs = [], drips = [], ripples = [], size = 300;
+let shown = null, blobs = [], drips = [], ripples = [], size = 280;
 function fit(){ const r = cv.getBoundingClientRect(); size = r.width; const d = Math.min(devicePixelRatio || 1, 2.5); cv.width = cv.height = Math.round(size * d); ctx.setTransform(d, 0, 0, d, 0, 0); }
 addEventListener('resize', fit);
 function drawBowl(t){
-  const c = ctx, W = size, cx = W / 2, cy = W / 2, R = W * .47;
+  const c = ctx, W = size, cx = W / 2, cy = W / 2, R = W * .46;
   c.clearRect(0, 0, W, W);
-  // 影子
-  const sh = c.createRadialGradient(cx + R * .06, cy + R * .1, R * .7, cx + R * .06, cy + R * .1, R * 1.06);
-  sh.addColorStop(0, 'rgba(60,35,15,.28)'); sh.addColorStop(1, 'rgba(60,35,15,0)');
-  c.fillStyle = sh; c.beginPath(); c.arc(cx + R * .06, cy + R * .1, R * 1.06, 0, 7); c.fill();
-  // 碗沿：白瓷
+  // 桌上的影子
+  c.fillStyle = 'rgba(90,45,10,.18)';
+  c.beginPath(); c.ellipse(cx + R * .05, cy + R * .12, R * 1.02, R * .98, 0, 0, 7); c.fill();
+  // 白瓷碗，碗沿一圈薄荷绿
   const rim = c.createRadialGradient(cx - R * .3, cy - R * .35, R * .2, cx, cy, R);
-  rim.addColorStop(0, '#ffffff'); rim.addColorStop(.7, '#f5f2ec'); rim.addColorStop(1, '#d9d1c3');
+  rim.addColorStop(0, '#ffffff'); rim.addColorStop(.75, '#fbf6ee'); rim.addColorStop(1, '#e6dccd');
   c.fillStyle = rim; c.beginPath(); c.arc(cx, cy, R, 0, 7); c.fill();
-  // 青花一圈
-  c.save();
-  c.strokeStyle = 'rgba(44,79,138,.85)'; c.lineWidth = R * .012;
-  c.beginPath(); c.arc(cx, cy, R * .955, 0, 7); c.stroke();
-  c.beginPath(); c.arc(cx, cy, R * .86, 0, 7); c.stroke();
-  c.lineWidth = R * .014; c.lineCap = 'round';
-  for (let k = 0; k < 24; k++){
-    const a = k / 24 * Math.PI * 2, r1 = R * .908;
-    c.beginPath(); c.arc(cx + Math.cos(a) * r1, cy + Math.sin(a) * r1, R * .028, a + .6, a + .6 + Math.PI * 1.3); c.stroke();
-    c.beginPath(); c.arc(cx + Math.cos(a + .13) * r1, cy + Math.sin(a + .13) * r1, R * .012, 0, 7); c.fillStyle = 'rgba(44,79,138,.7)'; c.fill();
-  }
-  c.restore();
+  c.strokeStyle = '#5fc7a8'; c.lineWidth = R * .05;
+  c.beginPath(); c.arc(cx, cy, R * .935, 0, 7); c.stroke();
+  c.fillStyle = '#fff';
+  for (let k = 0; k < 28; k++){ const a = k / 28 * Math.PI * 2; c.beginPath(); c.arc(cx + Math.cos(a) * R * .935, cy + Math.sin(a) * R * .935, R * .011, 0, 7); c.fill(); }
   // 碗里
-  const inner = R * .84;
-  const wall = c.createRadialGradient(cx, cy + R * .1, inner * .3, cx, cy, inner);
-  wall.addColorStop(0, '#fbfaf6'); wall.addColorStop(1, '#e3ddd1');
+  const inner = R * .85;
+  const wall = c.createRadialGradient(cx, cy + R * .12, inner * .25, cx, cy, inner);
+  wall.addColorStop(0, '#fffdf9'); wall.addColorStop(1, '#ebe2d4');
   c.fillStyle = wall; c.beginPath(); c.arc(cx, cy, inner, 0, 7); c.fill();
   // 颜料
   const used = S ? dropsUsed() : 0;
@@ -375,6 +400,7 @@ function drawBowl(t){
     const y = d.y0 + (d.y1 - d.y0) * u * u;
     c.fillStyle = d.color;
     c.beginPath(); c.moveTo(d.x, y - 12); c.bezierCurveTo(d.x + 7, y - 2, d.x + 6, y + 6, d.x, y + 6); c.bezierCurveTo(d.x - 6, y + 6, d.x - 7, y - 2, d.x, y - 12); c.fill();
+    c.fillStyle = 'rgba(255,255,255,.5)'; c.beginPath(); c.arc(d.x - 2, y + 1, 1.6, 0, 7); c.fill();
   }
 }
 let last = 0;
@@ -396,7 +422,7 @@ function frame(t){
 function addDrop(i){
   if (S.done || dropsUsed() >= MAX_DROPS) return;
   Sound.unlock();
-  const t = performance.now(), cx = size / 2, inner = size * .47 * .84;
+  const t = performance.now(), cx = size / 2, inner = size * .46 * .85;
   const a = Math.random() * Math.PI * 2, d = Math.random() * inner * .35;
   const x = cx + Math.cos(a) * d, y = size / 2 + Math.sin(a) * d;
   drips.push({x, y0: -10, y1: y, t0: t, color: PIGMENTS[i].hex});
@@ -446,21 +472,20 @@ const EMOJI = [['🟥', '#dd2e44'], ['🟧', '#f4900c'], ['🟨', '#fdcb58'], ['
 const toEmoji = hex => { const lab = linToLab(hexToRgb(hex).map(toLin)); let best = EMOJI[0], d = 1e9; for (const e of EMOJI){ const x = de2000(lab, e[1]); if (x < d){ d = x; best = e; } } return best[0]; };
 function shareText(){
   const best = Math.max(...S.tries.map(t => t.s)), ok = best >= PASS;
-  return `今日一色 第${TODAY}期「${S.color.name}」\n${S.tries.map(t => toEmoji(t.hex)).join('')} ${ok ? S.tries.length : 'X'}/${TRIES} · ${pct(best)}%\n` + (location.protocol.startsWith('http') && !PREVIEW ? location.origin + location.pathname : '');
+  return `今日一色 第${TODAY}期「${S.color.name}」${'★'.repeat(S.color.stars)}\n${S.tries.map(t => toEmoji(t.hex)).join('')} ${ok ? S.tries.length : 'X'}/${TRIES} · ${pct(best)}%\n` + (location.protocol.startsWith('http') && !PREVIEW ? location.origin + location.pathname : '');
 }
 const PREVIEW = !!window.claude || /(^|\.)claude(usercontent)?\.(ai|com)$/.test(location.hostname);
 function showResult(fresh){
   const best = Math.max(...S.tries.map(t => t.s)), ok = best >= PASS;
   const card = el('div', 'card');
-  card.appendChild(el('h2', '', ok ? (best >= 99.5 ? '一模一样' : '调出来了') : '下次一定'));
+  card.appendChild(el('h2', '', ok ? (best >= 99.5 ? '一模一样！' : '调出来了！') : '下次一定'));
   const sw = el('div', 'swatch');
   sw.style.background = S.color.hex;
-  const light = S.tLab[0] > 62;
-  sw.style.color = light ? '#2b2522' : '#fbf6ee';
-  sw.append(el('span', 'name', S.color.name), el('span', 'hex', S.color.hex.toUpperCase() + ' · ' + S.color.desc));
+  sw.style.color = S.tLab[0] > 62 ? '#33302e' : '#fff';
+  sw.append(el('span', 'name', S.color.name), el('span', 'hex', S.color.hex.toUpperCase()));
   card.appendChild(sw);
   const sc = el('div', 'score', pct(best) + '%');
-  sc.appendChild(el('small', '', ok ? `第 ${S.tries.findIndex(t => t.s >= PASS) + 1} 次就调出来了` : '六次都没到 97%，看看标准配方'));
+  sc.appendChild(el('small', '', ok ? `第 ${S.tries.findIndex(t => t.s >= PASS) + 1} 次就调出来了` : `${TRIES} 次都没到 ${PASS}%，看看标准配方`));
   card.appendChild(sc);
   card.appendChild(el('p', 'small', '标准配方（按比例，滴数翻倍也一样）'));
   const rec = el('div', 'recipe');
@@ -504,7 +529,9 @@ function fallbackCopy(t){
 function help(){
   const card = el('div', 'card');
   card.appendChild(el('h2', '', '怎么玩'));
-  for (const t of ['每天一个中国传统色，所有人都是同一题。', '点下面的颜料往碗里滴，像真的颜料一样混：黄加蓝会变绿，加白变浅，加墨变暗。白粉一滴是一大勺，墨很浓。', '觉得像了就点「比一比」，会告诉你相似度，还有偏亮偏暗、偏哪个色、太艳还是太灰。', `一共 ${TRIES} 次机会，到 ${PASS}% 就算调成。碗最多装 ${MAX_DROPS} 滴，可以撤一滴，也可以倒掉重来。`]) card.appendChild(el('p', '', t));
+  const ul = el('ul', 'how');
+  for (const t of ['每天一个颜色，所有人都是同一题。', '点颜料瓶往碗里滴，像真的颜料一样混：黄加蓝变绿，加白变浅，加黑变暗。白色一滴是一大勺，黑色很浓，一点就够。', '觉得像了就点「比一比」，会告诉你相似度，还有偏亮偏暗、偏哪个色、太艳还是太灰。', `一共 ${TRIES} 次机会，到 ${PASS}% 就算调成。碗最多装 ${MAX_DROPS} 滴，可以撤一滴，也可以倒掉重来。`, '每个颜色都得用三种以上的颜料。周一周二有点难，周三到周五挺难，周末超难。']) ul.appendChild(el('li', '', t));
+  card.appendChild(ul);
   const ok = el('button', 'btn main', '开始调色');
   ok.type = 'button';
   ok.addEventListener('click', closeModal);
@@ -521,8 +548,8 @@ const Sound = (() => {
   const A = {on: store.get('sound', true) !== false};
   A.unlock = () => { if (ac){ if (ac.state === 'suspended') ac.resume(); return; } try { ac = new (window.AudioContext || window.webkitAudioContext)(); out = ac.createGain(); out.gain.value = A.on ? .8 : 0; out.connect(ac.destination); } catch (e){} };
   const tone = (f, d = .4, g = .15, type = 'sine', t = 0, f2) => { if (!ac || !A.on) return; const t0 = ac.currentTime + t, o = ac.createOscillator(), e = ac.createGain(); o.type = type; o.frequency.setValueAtTime(f, t0); if (f2) o.frequency.exponentialRampToValueAtTime(f2, t0 + d); e.gain.setValueAtTime(.0001, t0); e.gain.linearRampToValueAtTime(g, t0 + .006); e.gain.exponentialRampToValueAtTime(.0001, t0 + d); o.connect(e); e.connect(out); o.start(t0); o.stop(t0 + d + .05); };
-  const PENTA = [523, 587, 659, 784, 880, 1047, 1175];
-  A.drop = i => { tone(PENTA[i], .5, .1); tone(PENTA[i] * 2, .15, .04, 'sine', .01); tone(1400, .08, .05, 'sine', .02, 500); };
+  const NOTES = [523, 587, 659, 784, 880, 1047, 1175];
+  A.drop = i => { tone(NOTES[i], .5, .1); tone(NOTES[i] * 2, .15, .04, 'sine', .01); tone(1400, .08, .05, 'sine', .02, 500); };
   A.tick = () => tone(900, .06, .06, 'triangle');
   A.pour = () => { for (let k = 0; k < 6; k++) tone(300 - k * 30, .12, .05, 'sine', k * .04, 120); };
   A.check = s => { tone(392, .3, .1, 'triangle'); tone(s >= 90 ? 587 : 330, .4, .08, 'triangle', .12); };
@@ -543,7 +570,7 @@ fit();
 newRound(false);
 requestAnimationFrame(frame);
 if (!store.get('seenHelp', false)){ store.set('seenHelp', true); setTimeout(help, 300); }
-if (['localhost', '127.0.0.1'].includes(location.hostname)) window.__c = {get S(){ return S; }, addDrop, check, undo, pour, newRound, mix, COLORS, PIGMENTS, similarity, linToLab};
+if (['localhost', '127.0.0.1'].includes(location.hostname)) window.__c = {get S(){ return S; }, addDrop, check, undo, pour, newRound, mix, COLORS, PIGMENTS, similarity, linToLab, colorOfDay, starsOf};
 })();
 </script>
 
