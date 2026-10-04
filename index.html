@@ -118,6 +118,22 @@ footer{text-align:center;color:#8a6a4c;font-size:12px;font-weight:500}
 .row{display:flex;gap:8px}
 .row > *{flex:1}
 .small{font-size:12px;color:var(--soft);text-align:center}
+/* 排行榜 */
+.blist{display:flex;flex-direction:column;gap:6px;min-height:120px;max-height:52vh;overflow:auto;margin:0 -4px;padding:2px 4px}
+.brow{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:14px;background:#fff;box-shadow:inset 0 0 0 1.5px var(--line)}
+.brow.me{background:#e6f7f1;box-shadow:inset 0 0 0 2px var(--mint)}
+.brow .rk{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-family:var(--font-num);font-weight:800;font-size:14px;color:var(--soft)}
+.brow .rk.g1{background:#ffd54f;color:#7a5200}.brow .rk.g2{background:#dfe3e8;color:#4a5560}.brow .rk.g3{background:#f1c39a;color:#7a3f12}
+.brow i{flex:none;width:26px;height:26px;border-radius:8px;background:var(--c);box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+.brow .bn{flex:1;min-width:0;font-weight:700;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.brow .bs{flex:none;text-align:right;font-size:12px;color:var(--soft);line-height:1.25}
+.brow .bs b{display:block;font-family:var(--font-num);font-weight:800;font-size:15px;color:var(--ink)}
+.brow .bs b.fail{color:var(--soft)}
+.bnote{text-align:center;font-size:13px;color:var(--soft);padding:16px 0}
+.mine{text-align:center;font-size:14px;font-weight:700;color:var(--mint-d)}
+.name-field{width:100%;border:0;border-radius:14px;padding:12px 14px;font:inherit;font-size:17px;font-weight:700;background:#fff;box-shadow:inset 0 0 0 2px var(--line);outline:none;-webkit-user-select:text;user-select:text}
+.name-field:focus{box-shadow:inset 0 0 0 2px var(--mint)}
+.name-err{min-height:1.2em;margin:4px 0 0;font-size:12px;color:var(--coral);text-align:center}
 .toast{position:fixed;left:50%;top:18px;z-index:30;transform:translate(-50%,-10px);opacity:0;padding:8px 18px;border-radius:999px;background:var(--ink);color:#fff;font-size:14px;font-weight:700;transition:all .25s;pointer-events:none}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 @media (prefers-reduced-motion:reduce){.card{animation:none}}
@@ -126,6 +142,7 @@ footer{text-align:center;color:#8a6a4c;font-size:12px;font-weight:500}
 <div class="wrap">
   <header>
     <div class="brand"><h1 class="logo" id="title">今日一色</h1><span class="sub" id="sub"></span></div>
+    <button class="ibtn" id="btnBoard" type="button" aria-label="排行榜">🏆</button>
     <button class="ibtn" id="btnPractice" type="button" aria-label="练一练">练</button>
     <button class="ibtn" id="btnHelp" type="button" aria-label="怎么玩">?</button>
     <button class="ibtn" id="btnSound" type="button" aria-label="声音">🔊</button>
@@ -167,6 +184,7 @@ footer{text-align:center;color:#8a6a4c;font-size:12px;font-weight:500}
 const PIGMENTS = [{"id":"red","name":"红","hex":"#e2452b","k":1},{"id":"rose","name":"玫红","hex":"#b81d52","k":1},{"id":"yellow","name":"黄","hex":"#f8c81c","k":1},{"id":"green","name":"绿","hex":"#2fae7a","k":1},{"id":"blue","name":"蓝","hex":"#1d5e9a","k":1},{"id":"white","name":"白","hex":"#f8f6f0","k":4},{"id":"black","name":"黑","hex":"#232125","k":0.5}];
 const COLORS = [{"name":"海带","hex":"#3a4a2a","recipe":[4,1,5,2,3,0,1],"desc":"一根海带","stars":3},{"name":"黑板","hex":"#2f4a3a","recipe":[0,0,2,3,3,1,5],"desc":"教室的黑板","stars":3},{"name":"绿皮火车","hex":"#2f5b3b","recipe":[0,0,3,4,4,1,3],"desc":"绿皮火车","stars":3},{"name":"海苔","hex":"#2e3a2a","recipe":[1,0,2,2,1,0,5],"desc":"一片海苔","stars":3},{"name":"菠菜","hex":"#3e6b35","recipe":[0,0,6,6,2,2,3],"desc":"一把菠菜","stars":3},{"name":"沼泽","hex":"#4a5a3a","recipe":[7,1,3,5,2,2,0],"desc":"沼泽","stars":3},{"name":"乒乓球台","hex":"#2a5a4a","recipe":[3,0,1,4,9,1,2],"desc":"乒乓球台","stars":3},{"name":"熊猫眼圈","hex":"#3a3a3b","recipe":[2,2,1,6,0,0,2],"desc":"熊猫的黑眼圈","stars":3},{"name":"茄子","hex":"#4a2946","recipe":[0,9,1,4,0,1,4],"desc":"茄子","stars":3},{"name":"鹦鹉","hex":"#49a14a","recipe":[1,0,2,7,0,2,0],"desc":"一只绿鹦鹉","stars":3},{"name":"海藻","hex":"#4a5a2a","recipe":[0,2,11,4,2,1,0],"desc":"海藻","stars":3},{"name":"蓝莓酱","hex":"#3f2b55","recipe":[0,11,1,3,4,1,0],"desc":"抹在吐司上的蓝莓酱","stars":3},{"name":"墨水","hex":"#292f59","recipe":[0,5,0,3,6,0,2],"desc":"蓝黑墨水","stars":3},{"name":"木耳","hex":"#3a2a28","recipe":[2,3,3,1,0,0,9],"desc":"泡发的木耳","stars":3},{"name":"葡萄汁","hex":"#5a2a4a","recipe":[0,11,1,2,0,2,4],"desc":"一杯葡萄汁","stars":3},{"name":"藏青西装","hex":"#2a3550","recipe":[0,5,1,0,10,1,3],"desc":"一套藏青西装","stars":3},{"name":"邮筒","hex":"#246f3f","recipe":[0,0,1,1,3,0,0],"desc":"街边的绿邮筒","stars":3},{"name":"红豆沙","hex":"#6e3435","recipe":[0,5,4,2,0,1,0],"desc":"熬得沙沙的红豆","stars":3},{"name":"酸梅汤","hex":"#692a2a","recipe":[4,7,5,0,0,0,3],"desc":"冰镇酸梅汤","stars":3},{"name":"水獭","hex":"#6a4a3a","recipe":[3,3,5,2,0,4,3],"desc":"水獭","stars":3},{"name":"夜空","hex":"#2a2a4b","recipe":[0,6,0,2,6,0,5],"desc":"夜空","stars":3},{"name":"糖炒栗子","hex":"#6f4128","recipe":[5,2,7,0,0,1,3],"desc":"糖炒栗子的壳","stars":3},{"name":"金枪鱼","hex":"#d83c44","recipe":[0,5,3,0,0,3,0],"desc":"一块金枪鱼","stars":3},{"name":"冲锋衣","hex":"#3b796a","recipe":[4,0,0,3,8,5,0],"desc":"一件冲锋衣","stars":3},{"name":"苔藓绿","hex":"#5a6a2a","recipe":[7,0,8,3,1,1,0],"desc":"墙角的苔藓","stars":3},{"name":"海星","hex":"#ef8136","recipe":[0,1,9,0,0,5,0],"desc":"沙滩上的海星","stars":3},{"name":"热可可","hex":"#6b4630","recipe":[1,4,9,0,1,3,2],"desc":"冬天捧在手里的热可可","stars":3},{"name":"皮带","hex":"#794a2c","recipe":[6,2,6,2,0,1,0],"desc":"一条皮带","stars":3},{"name":"红酒","hex":"#692330","recipe":[0,8,3,0,0,0,2],"desc":"杯子里的红酒","stars":3},{"name":"黑糖","hex":"#5b3424","recipe":[1,5,10,0,1,0,2],"desc":"一块黑糖","stars":3},{"name":"桑葚","hex":"#4a1f3b","recipe":[1,10,0,0,0,0,6],"desc":"一把桑葚","stars":3},{"name":"日落","hex":"#e8653b","recipe":[0,3,10,0,0,7,0],"desc":"太阳快落山的时候","stars":3},{"name":"普洱","hex":"#5f3123","recipe":[0,5,10,0,0,0,4],"desc":"泡了很久的普洱","stars":3},{"name":"黄瓜皮","hex":"#4a6b3a","recipe":[5,0,4,2,3,3,1],"desc":"黄瓜的皮","stars":3},{"name":"柿子","hex":"#ec742b","recipe":[1,1,11,0,0,3,0],"desc":"熟透的柿子","stars":3},{"name":"火山灰","hex":"#5a5654","recipe":[0,3,3,2,2,7,3],"desc":"火山灰","stars":3},{"name":"玫瑰","hex":"#ca2b48","recipe":[0,5,1,0,0,1,0],"desc":"一枝红玫瑰","stars":3},{"name":"美式","hex":"#4b2f22","recipe":[0,4,9,0,0,0,7],"desc":"一杯不加糖的黑咖啡","stars":3},{"name":"西瓜瓤","hex":"#e3525c","recipe":[7,4,0,0,0,8,0],"desc":"西瓜正中间那一勺","stars":3},{"name":"咸蛋黄","hex":"#f28c2f","recipe":[2,0,5,0,0,2,0],"desc":"流油的咸蛋黄","stars":3},{"name":"紫米粥","hex":"#5a3a4a","recipe":[0,5,2,1,1,3,2],"desc":"一碗紫米粥","stars":3},{"name":"牛仔裤","hex":"#3e5a7f","recipe":[0,2,0,5,5,5,2],"desc":"新买的牛仔裤","stars":3},{"name":"指甲油","hex":"#d63a55","recipe":[1,5,1,0,0,3,0],"desc":"一瓶指甲油","stars":3},{"name":"蜂鸟","hex":"#38896a","recipe":[1,0,0,6,1,1,0],"desc":"蜂鸟","stars":3},{"name":"珍珠","hex":"#3b2b23","recipe":[0,3,6,0,0,0,10],"desc":"奶茶杯底的黑珍珠","stars":3},{"name":"乌龟","hex":"#5a6a3a","recipe":[0,0,4,2,0,3,3],"desc":"乌龟壳","stars":3},{"name":"黑巧克力","hex":"#422a24","recipe":[0,2,3,0,0,0,4],"desc":"苦到皱眉的那种","stars":3},{"name":"呢子大衣","hex":"#594a4a","recipe":[1,5,4,1,3,5,0],"desc":"一件呢子大衣","stars":3},{"name":"翡翠","hex":"#388a5a","recipe":[1,0,1,6,3,2,0],"desc":"一块翡翠","stars":3},{"name":"雷雨","hex":"#3e4a5b","recipe":[0,1,0,0,4,5,8],"desc":"雷雨前的天","stars":3},{"name":"摩卡","hex":"#8a5e48","recipe":[7,1,2,0,0,7,3],"desc":"一杯摩卡","stars":3},{"name":"杨梅","hex":"#78203a","recipe":[1,15,2,0,0,0,2],"desc":"一颗杨梅","stars":3},{"name":"军绿","hex":"#5a5f3a","recipe":[10,0,1,3,1,2,0],"desc":"一件军绿外套","stars":3},{"name":"核桃","hex":"#8a6441","recipe":[4,1,5,0,0,7,3],"desc":"一颗核桃","stars":3},{"name":"深海","hex":"#203a5a","recipe":[0,1,0,0,7,0,2],"desc":"深海","stars":3},{"name":"红丝绒","hex":"#8e2935","recipe":[9,9,1,1,0,0,0],"desc":"红丝绒蛋糕的切面","stars":3},{"name":"羽绒服","hex":"#3a4a6b","recipe":[0,1,0,3,1,1,1],"desc":"一件深蓝羽绒服","stars":3},{"name":"青椒","hex":"#4b893a","recipe":[1,0,6,7,1,3,1],"desc":"一个青椒","stars":3},{"name":"香菇","hex":"#7a5a3e","recipe":[2,2,6,1,0,6,3],"desc":"一朵香菇","stars":3},{"name":"葡萄","hex":"#5d3b5e","recipe":[1,4,0,0,1,3,2],"desc":"一大串紫葡萄","stars":3},{"name":"校服","hex":"#39599d","recipe":[0,2,0,1,7,4,0],"desc":"蓝白校服的蓝","stars":3},{"name":"松果","hex":"#895a3a","recipe":[4,1,4,0,0,4,2],"desc":"一颗松果","stars":3},{"name":"孔雀","hex":"#296a7a","recipe":[0,0,0,5,6,1,1],"desc":"孔雀","stars":3},{"name":"西兰花","hex":"#4f7a3a","recipe":[3,0,6,2,3,4,1],"desc":"一朵西兰花","stars":3},{"name":"柏油路","hex":"#4a4a4b","recipe":[5,2,0,5,1,2,1],"desc":"柏油马路","stars":3},{"name":"李子","hex":"#7b2e4c","recipe":[2,9,1,2,0,2,0],"desc":"紫红的李子","stars":3},{"name":"荷叶","hex":"#5a894a","recipe":[4,0,4,0,4,7,0],"desc":"荷叶","stars":3},{"name":"老木门","hex":"#7a5230","recipe":[6,1,6,0,0,3,3],"desc":"一扇老木门","stars":3},{"name":"游泳圈","hex":"#eb6a5a","recipe":[7,1,0,0,0,7,0],"desc":"红白游泳圈的红","stars":3},{"name":"暴风雨","hex":"#4a5050","recipe":[4,1,0,2,2,4,4],"desc":"暴风雨","stars":3},{"name":"橘猫","hex":"#f49834","recipe":[3,0,9,0,0,5,0],"desc":"一只胖橘猫","stars":3},{"name":"红砖","hex":"#a24a33","recipe":[0,5,10,1,0,4,0],"desc":"红砖墙","stars":3},{"name":"仙人掌","hex":"#5b8a5a","recipe":[0,0,3,0,3,8,2],"desc":"仙人掌","stars":3},{"name":"工装裤","hex":"#7a6a4a","recipe":[3,1,3,0,1,6,1],"desc":"一条工装裤","stars":3},{"name":"竹林","hex":"#5b7a4a","recipe":[1,1,4,5,1,5,0],"desc":"一片竹林","stars":3},{"name":"树皮","hex":"#6b5a4a","recipe":[8,0,0,1,0,6,5],"desc":"老树的皮","stars":3},{"name":"操场草皮","hex":"#589948","recipe":[0,0,5,3,2,6,1],"desc":"操场的草皮","stars":3},{"name":"铜绿","hex":"#599a8a","recipe":[1,0,0,7,1,8,1],"desc":"旧铜器上的绿锈","stars":3},{"name":"蕨","hex":"#5a8b3a","recipe":[3,0,6,2,2,4,0],"desc":"一片蕨","stars":3},{"name":"红枣","hex":"#8b2a2a","recipe":[3,7,5,0,0,0,1],"desc":"一颗红枣","stars":4},{"name":"甜菜根","hex":"#8c2848","recipe":[4,10,0,1,0,1,0],"desc":"甜菜根","stars":4},{"name":"青苔","hex":"#6b7b3b","recipe":[1,0,5,2,0,4,2],"desc":"石头上的青苔","stars":4},{"name":"蓝莓","hex":"#4f5d8e","recipe":[0,3,0,11,0,5,0],"desc":"表面带一层白霜的蓝莓","stars":4},{"name":"树莓","hex":"#c5264e","recipe":[2,9,0,0,0,1,0],"desc":"刚摘下来的树莓","stars":4},{"name":"巧克力冰淇淋","hex":"#794d3a","recipe":[7,1,1,1,0,2,1],"desc":"一球巧克力冰淇淋","stars":4},{"name":"牛肝菌","hex":"#896a4a","recipe":[2,2,5,2,0,8,1],"desc":"一朵牛肝菌","stars":4},{"name":"红茶","hex":"#9a4a23","recipe":[0,3,14,0,0,1,1],"desc":"一杯红茶","stars":4},{"name":"南瓜汤","hex":"#f5a63f","recipe":[1,0,3,0,0,3,0],"desc":"一碗热乎乎的南瓜汤","stars":4},{"name":"青蛙","hex":"#6a9a3b","recipe":[0,0,6,3,0,4,1],"desc":"荷叶上的青蛙","stars":4},{"name":"翠鸟","hex":"#318e98","recipe":[0,0,0,10,7,3,0],"desc":"一闪而过的翠鸟","stars":4},{"name":"秋葵","hex":"#6a8a4a","recipe":[0,1,7,0,3,9,0],"desc":"一根秋葵","stars":4},{"name":"湖水","hex":"#4c8e8a","recipe":[0,0,0,10,1,7,2],"desc":"山里的湖","stars":4},{"name":"红烧肉","hex":"#893a24","recipe":[2,4,9,1,0,0,0],"desc":"红烧肉的酱色","stars":4},{"name":"热带鱼","hex":"#3b9f9f","recipe":[0,0,0,9,4,4,0],"desc":"一条热带鱼","stars":4},{"name":"斑马","hex":"#59595a","recipe":[2,2,1,6,0,5,2],"desc":"斑马","stars":4},{"name":"草地","hex":"#68a94e","recipe":[1,0,3,2,1,5,0],"desc":"一片草地","stars":4},{"name":"卤蛋","hex":"#895930","recipe":[8,0,2,1,0,1,0],"desc":"卤了一夜的蛋","stars":4},{"name":"三文鱼","hex":"#f28a58","recipe":[5,0,1,0,0,7,0],"desc":"一片三文鱼","stars":4},{"name":"鸢尾","hex":"#69589e","recipe":[0,5,0,3,2,10,0],"desc":"一朵鸢尾花","stars":4},{"name":"西瓜汁","hex":"#eb6c6b","recipe":[6,2,0,0,0,11,0],"desc":"鲜榨西瓜汁","stars":4},{"name":"杜鹃","hex":"#dc4379","recipe":[1,5,0,0,0,5,0],"desc":"满山的杜鹃","stars":4},{"name":"蝴蝶","hex":"#4c6ab1","recipe":[0,1,0,0,3,4,0],"desc":"一只蓝蝴蝶","stars":4},{"name":"橄榄","hex":"#7a7a3b","recipe":[7,0,5,1,1,5,0],"desc":"一颗橄榄","stars":4},{"name":"花盆","hex":"#b16241","recipe":[0,3,8,0,0,8,1],"desc":"一个红陶花盆","stars":4},{"name":"啤酒","hex":"#f5aa33","recipe":[1,0,6,0,0,3,0],"desc":"一杯啤酒","stars":4},{"name":"抹茶","hex":"#7c8f3e","recipe":[4,0,6,1,1,6,0],"desc":"刚刷开的一碗抹茶","stars":4},{"name":"珊瑚","hex":"#ef7b6a","recipe":[7,1,0,0,0,12,0],"desc":"珊瑚","stars":4},{"name":"乌云","hex":"#595f70","recipe":[1,3,1,5,2,7,0],"desc":"快下雨的云","stars":4},{"name":"军舰灰","hex":"#6a7077","recipe":[2,1,0,2,1,7,1],"desc":"军舰的灰","stars":4},{"name":"瓦片","hex":"#5b6060","recipe":[0,1,1,4,0,6,4],"desc":"屋顶的瓦片","stars":4},{"name":"紫薯","hex":"#6c3f7a","recipe":[1,9,0,1,2,7,0],"desc":"蒸好掰开的紫薯","stars":4},{"name":"猫头鹰","hex":"#8b7a59","recipe":[5,1,2,3,0,9,0],"desc":"猫头鹰","stars":4},{"name":"白灼虾","hex":"#f08a6b","recipe":[1,1,2,0,0,10,0],"desc":"煮熟的虾","stars":4},{"name":"哈密瓜","hex":"#f5a85b","recipe":[2,0,2,0,0,7,0],"desc":"哈密瓜的果肉","stars":4},{"name":"巧克力奶","hex":"#a0785f","recipe":[7,0,0,0,0,10,2],"desc":"一盒巧克力奶","stars":4},{"name":"蛋黄","hex":"#f6b639","recipe":[1,0,7,0,0,5,0],"desc":"溏心蛋的蛋黄","stars":4},{"name":"蔓越莓","hex":"#a2304a","recipe":[0,12,3,0,0,4,1],"desc":"蔓越莓干","stars":4},{"name":"积木","hex":"#3e79b4","recipe":[0,1,0,1,10,8,0],"desc":"一块蓝积木","stars":4},{"name":"红土","hex":"#a75232","recipe":[3,3,9,0,0,4,1],"desc":"红土地","stars":4},{"name":"陶罐","hex":"#b6714c","recipe":[1,2,6,0,0,10,1],"desc":"一个陶罐","stars":4},{"name":"西柚","hex":"#ef7b62","recipe":[6,1,1,0,0,11,0],"desc":"西柚的果肉","stars":4},{"name":"灯芯绒","hex":"#986949","recipe":[2,2,5,1,0,8,1],"desc":"灯芯绒外套","stars":4},{"name":"格子衬衫","hex":"#a74b4a","recipe":[9,3,0,0,0,5,1],"desc":"红格子衬衫","stars":4},{"name":"浅海","hex":"#62c3c4","recipe":[0,0,0,2,1,5,0],"desc":"能看见底的浅海","stars":4},{"name":"苔原","hex":"#7b8b5d","recipe":[0,0,3,2,0,10,3],"desc":"苔原","stars":4},{"name":"肉桂","hex":"#a75931","recipe":[4,2,9,0,0,4,1],"desc":"一撮肉桂粉","stars":4},{"name":"跑道","hex":"#af5541","recipe":[1,4,7,0,0,7,1],"desc":"学校的塑胶跑道","stars":4},{"name":"火龙果","hex":"#cf306a","recipe":[1,14,0,0,0,5,0],"desc":"红心火龙果","stars":4},{"name":"紫水晶","hex":"#895aa3","recipe":[0,5,0,1,1,11,0],"desc":"一块紫水晶","stars":4},{"name":"青砖","hex":"#69706f","recipe":[0,1,1,4,0,10,4],"desc":"老房子的青砖","stars":4},{"name":"桂圆","hex":"#9a6938","recipe":[5,0,3,0,0,3,1],"desc":"桂圆干","stars":4},{"name":"腐乳","hex":"#b0514b","recipe":[1,5,5,0,0,8,1],"desc":"一块红腐乳","stars":4},{"name":"枯叶","hex":"#997b4b","recipe":[5,0,1,1,0,4,0],"desc":"一片枯叶","stars":4},{"name":"毛豆","hex":"#7ea24a","recipe":[3,0,5,4,0,8,0],"desc":"煮好的毛豆","stars":4},{"name":"无花果","hex":"#8b596d","recipe":[0,3,1,0,0,9,3],"desc":"无花果的皮","stars":4},{"name":"玉米","hex":"#f7c84e","recipe":[1,0,7,0,0,12,0],"desc":"一根煮玉米","stars":4},{"name":"泳池","hex":"#68c1d1","recipe":[0,0,0,2,3,13,0],"desc":"泳池","stars":4},{"name":"蓝牛仔外套","hex":"#586f8f","recipe":[1,2,0,6,2,8,0],"desc":"牛仔外套","stars":4},{"name":"芹菜","hex":"#8ab66b","recipe":[0,0,3,3,0,13,1],"desc":"芹菜梗","stars":4},{"name":"青豆","hex":"#87aa59","recipe":[0,0,4,0,1,10,1],"desc":"一把青豆","stars":4},{"name":"焦糖","hex":"#ab6631","recipe":[0,2,12,0,0,5,1],"desc":"糖在锅里熬到冒泡","stars":4},{"name":"牵牛花","hex":"#7b69b2","recipe":[0,3,0,0,2,11,0],"desc":"一朵牵牛花","stars":4},{"name":"大海","hex":"#346f9a","recipe":[0,1,0,7,8,4,0],"desc":"大海","stars":4},{"name":"奶油南瓜","hex":"#f6bb72","recipe":[1,0,1,0,0,7,0],"desc":"奶油南瓜的果肉","stars":4},{"name":"猕猴桃","hex":"#8aac3f","recipe":[0,0,9,2,0,8,1],"desc":"猕猴桃的果肉","stars":4},{"name":"瓷砖绿","hex":"#76ae9d","recipe":[2,0,0,0,3,15,0],"desc":"老房子厨房的瓷砖","stars":4},{"name":"河水","hex":"#6a897a","recipe":[2,0,0,5,0,9,2],"desc":"河水","stars":4},{"name":"花生酱","hex":"#af7a3d","recipe":[1,1,8,0,0,7,1],"desc":"一勺花生酱","stars":4},{"name":"落叶","hex":"#b47946","recipe":[3,1,6,0,0,9,1],"desc":"秋天的落叶","stars":4},{"name":"橡皮泥","hex":"#7dbd49","recipe":[1,0,6,4,0,8,0],"desc":"一团绿橡皮泥","stars":4},{"name":"奶黄包","hex":"#f7cd65","recipe":[1,0,4,0,0,15,0],"desc":"奶黄包的馅","stars":4},{"name":"砂纸","hex":"#a39777","recipe":[1,1,2,2,0,14,0],"desc":"一张砂纸","stars":4},{"name":"瑜伽垫","hex":"#8c7ab5","recipe":[0,2,0,3,0,11,0],"desc":"一张瑜伽垫","stars":4},{"name":"水蜜桃","hex":"#f3a285","recipe":[0,1,2,0,0,17,0],"desc":"水蜜桃红红的脸","stars":4},{"name":"肥皂","hex":"#bed0b6","recipe":[1,0,0,1,0,18,0],"desc":"一块香皂","stars":4},{"name":"旧铁皮","hex":"#7a7a6f","recipe":[1,1,1,3,0,8,1],"desc":"旧铁皮","stars":4},{"name":"木地板","hex":"#a67240","recipe":[6,0,3,0,0,5,1],"desc":"木地板","stars":4},{"name":"旧牛仔","hex":"#6a84a8","recipe":[0,1,0,2,2,11,1],"desc":"洗得发白的牛仔裤","stars":4},{"name":"吐司边","hex":"#b8864e","recipe":[1,1,6,0,0,11,1],"desc":"烤得刚好的吐司边","stars":5},{"name":"奶茶","hex":"#bd9870","recipe":[4,0,1,0,0,14,1],"desc":"一杯半糖奶茶","stars":5},{"name":"焦糖布丁","hex":"#b68846","recipe":[0,1,8,0,0,10,1],"desc":"布丁顶上亮晶晶那层","stars":5},{"name":"玫瑰花茶","hex":"#b8606b","recipe":[1,4,2,0,0,12,1],"desc":"泡开的玫瑰花茶","stars":5},{"name":"紫洋葱","hex":"#9c597c","recipe":[2,4,0,1,0,10,1],"desc":"一圈紫洋葱","stars":5},{"name":"芒果冰沙","hex":"#f7c872","recipe":[1,0,2,0,0,12,0],"desc":"一大杯芒果冰沙","stars":5},{"name":"薄荷糖","hex":"#99ccb0","recipe":[1,0,0,3,0,16,0],"desc":"一颗薄荷糖","stars":5},{"name":"南瓜子","hex":"#c2bf98","recipe":[0,0,1,0,0,18,1],"desc":"南瓜子仁","stars":5},{"name":"沙滩","hex":"#f7d094","recipe":[1,0,1,0,0,18,0],"desc":"沙滩","stars":5},{"name":"月光","hex":"#bdbfa1","recipe":[2,0,0,1,0,17,0],"desc":"地上的月光","stars":5},{"name":"冰沙","hex":"#acbec0","recipe":[0,0,0,1,0,18,1],"desc":"一杯冰沙","stars":5},{"name":"兔子","hex":"#c2b4a9","recipe":[1,0,0,0,0,18,1],"desc":"一只灰兔子","stars":5},{"name":"青柠","hex":"#9cc34a","recipe":[1,0,7,2,0,10,0],"desc":"切开的青柠","stars":5},{"name":"眼影","hex":"#a57a68","recipe":[2,1,1,1,0,7,0],"desc":"大地色眼影","stars":5},{"name":"毛线","hex":"#ba6d69","recipe":[0,3,3,0,0,13,1],"desc":"一团红毛线","stars":5},{"name":"薰衣草","hex":"#9a93c3","recipe":[0,1,0,2,0,11,0],"desc":"薰衣草","stars":5},{"name":"柳条","hex":"#9baf59","recipe":[0,0,4,1,0,10,1],"desc":"刚发芽的柳条","stars":5},{"name":"蜜桃乌龙","hex":"#f6b37e","recipe":[3,0,1,0,0,16,0],"desc":"蜜桃乌龙茶","stars":5},{"name":"草莓冰淇淋","hex":"#f39eb2","recipe":[1,1,0,0,0,18,0],"desc":"一球草莓冰淇淋","stars":5},{"name":"火烈鸟","hex":"#f08998","recipe":[0,2,1,0,0,17,0],"desc":"一条腿站着的火烈鸟","stars":5},{"name":"小猪","hex":"#f3a39d","recipe":[0,1,1,0,0,18,0],"desc":"小猪","stars":5},{"name":"水母","hex":"#bea3d2","recipe":[0,1,0,1,0,18,0],"desc":"透明的水母","stars":5},{"name":"紫薯酸奶","hex":"#c197bb","recipe":[0,1,0,0,0,18,1],"desc":"紫薯酸奶","stars":5},{"name":"焦糖玛奇朵","hex":"#ba8459","recipe":[2,1,4,0,0,12,1],"desc":"上面淋着焦糖","stars":5},{"name":"榨菜","hex":"#9a994c","recipe":[2,0,5,1,0,9,1],"desc":"一小碟榨菜","stars":5},{"name":"黄铜","hex":"#b3983c","recipe":[2,0,9,0,0,8,1],"desc":"一把黄铜钥匙","stars":5},{"name":"青香蕉","hex":"#b6c752","recipe":[1,0,6,1,0,12,0],"desc":"还没熟透的香蕉","stars":5},{"name":"岩石","hex":"#898075","recipe":[1,1,1,0,1,8,0],"desc":"一块岩石","stars":5},{"name":"蜗牛","hex":"#aa8459","recipe":[1,1,3,1,0,8,0],"desc":"蜗牛壳","stars":5},{"name":"奶咖","hex":"#bfa28b","recipe":[3,0,0,0,0,16,1],"desc":"奶多咖啡少","stars":5},{"name":"阴天","hex":"#9da9ad","recipe":[0,0,0,1,0,17,2],"desc":"阴天","stars":5},{"name":"雪顶咖啡","hex":"#be9a80","recipe":[4,0,0,0,0,15,1],"desc":"冰淇淋化在咖啡里","stars":5},{"name":"麻布","hex":"#baa885","recipe":[4,0,0,1,0,15,0],"desc":"一块麻布","stars":5},{"name":"橄榄油","hex":"#b7a645","recipe":[1,0,8,0,0,10,1],"desc":"一勺橄榄油","stars":5},{"name":"狗尾巴草","hex":"#a5a769","recipe":[2,0,1,1,0,7,0],"desc":"路边的狗尾巴草","stars":5},{"name":"雨后","hex":"#7a898a","recipe":[0,1,1,0,2,13,1],"desc":"雨后的街","stars":5},{"name":"黄昏","hex":"#bc7d6c","recipe":[0,2,3,0,0,14,1],"desc":"天快黑的时候","stars":5},{"name":"薄荷巧克力","hex":"#81c3ad","recipe":[1,0,0,3,1,15,0],"desc":"薄荷巧克力冰淇淋","stars":5},{"name":"绣球花","hex":"#879ad1","recipe":[0,1,0,0,2,16,0],"desc":"蓝紫色的绣球花","stars":5},{"name":"章鱼","hex":"#ba6a75","recipe":[2,3,1,0,0,13,1],"desc":"一只章鱼","stars":5},{"name":"紫藤","hex":"#a287c7","recipe":[0,2,0,0,1,17,0],"desc":"一架紫藤花","stars":5},{"name":"勿忘我","hex":"#7898cf","recipe":[0,1,0,0,3,16,0],"desc":"勿忘我","stars":5},{"name":"荞麦面","hex":"#897a6c","recipe":[0,1,2,1,0,12,3],"desc":"一碗荞麦面","stars":5},{"name":"鸽子","hex":"#8f91a2","recipe":[1,1,0,3,0,12,0],"desc":"广场上的鸽子","stars":5},{"name":"脏粉","hex":"#b68a88","recipe":[3,1,0,1,0,13,0],"desc":"带点灰的粉","stars":5},{"name":"生菜","hex":"#a3ca78","recipe":[1,0,2,2,0,14,0],"desc":"一片生菜","stars":5},{"name":"花生","hex":"#bb9664","recipe":[4,0,2,0,0,13,1],"desc":"一把花生","stars":5},{"name":"大象","hex":"#858785","recipe":[1,0,0,1,0,14,4],"desc":"大象","stars":5},{"name":"绿茶","hex":"#b8b95e","recipe":[2,0,4,1,0,13,0],"desc":"泡开的绿茶","stars":5},{"name":"青芥末","hex":"#a3b66b","recipe":[0,0,3,1,0,13,1],"desc":"生鱼片旁边那一小坨","stars":5},{"name":"风衣","hex":"#b69a6d","recipe":[0,1,3,1,0,13,0],"desc":"一件风衣","stars":5},{"name":"牛油果","hex":"#b5c766","recipe":[1,0,3,1,0,12,0],"desc":"切开的牛油果","stars":5},{"name":"抹茶冰淇淋","hex":"#b8cb8a","recipe":[1,0,1,1,0,14,0],"desc":"一球抹茶冰淇淋","stars":5},{"name":"抹茶拿铁","hex":"#a7ba7c","recipe":[0,0,2,1,0,15,1],"desc":"抹茶兑了牛奶，搅匀了","stars":5},{"name":"灰粉","hex":"#c09693","recipe":[0,1,1,0,0,17,1],"desc":"灰调的粉","stars":5},{"name":"绿豆汤","hex":"#b4b67b","recipe":[2,0,1,1,0,12,0],"desc":"夏天的绿豆汤","stars":5},{"name":"干草堆","hex":"#beb06b","recipe":[1,0,3,0,0,15,1],"desc":"干草堆","stars":5},{"name":"芦苇","hex":"#c1b38b","recipe":[1,0,1,0,0,17,1],"desc":"秋天的芦苇","stars":5},{"name":"土豆","hex":"#bea077","recipe":[3,0,1,0,0,15,1],"desc":"带皮的土豆","stars":5},{"name":"豆沙","hex":"#b6807a","recipe":[0,2,2,1,0,13,0],"desc":"不张扬的灰粉，口红里常见","stars":5},{"name":"多肉","hex":"#90b59a","recipe":[2,0,0,1,1,14,0],"desc":"窗台上的多肉","stars":5},{"name":"桔梗","hex":"#777ab4","recipe":[0,2,0,3,1,11,0],"desc":"桔梗花","stars":5},{"name":"芋泥","hex":"#aa96b7","recipe":[0,1,0,1,0,17,1],"desc":"压成泥的芋头，淡淡的紫","stars":5},{"name":"蘑菇","hex":"#bba082","recipe":[0,1,2,1,0,16,0],"desc":"一朵蘑菇","stars":5},{"name":"鹅卵石","hex":"#a7a098","recipe":[0,1,1,2,0,16,0],"desc":"河边的鹅卵石","stars":5},{"name":"雾紫","hex":"#a69aac","recipe":[1,1,0,2,0,16,0],"desc":"雾蒙蒙的紫","stars":5},{"name":"莫兰迪绿","hex":"#98a792","recipe":[2,0,0,2,0,15,1],"desc":"加了灰的绿，很安静","stars":5},{"name":"莫兰迪粉","hex":"#bda29b","recipe":[0,1,1,1,0,17,0],"desc":"加了灰的粉","stars":5},{"name":"麦穗","hex":"#bea771","recipe":[2,0,2,0,0,15,1],"desc":"一根麦穗","stars":5},{"name":"水泥","hex":"#9c9995","recipe":[0,1,1,0,1,14,0],"desc":"水泥墙","stars":5},{"name":"香芋冰淇淋","hex":"#987eac","recipe":[0,2,0,2,0,15,1],"desc":"香芋味的冰淇淋","stars":5},{"name":"老鼠","hex":"#8b8480","recipe":[0,1,1,2,0,10,1],"desc":"一只小灰鼠","stars":5},{"name":"海豚","hex":"#778898","recipe":[1,1,0,3,1,13,1],"desc":"海豚","stars":5},{"name":"拿铁","hex":"#b69474","recipe":[1,1,2,1,0,13,0],"desc":"咖啡和牛奶差不多一半一半","stars":5},{"name":"雾霾蓝","hex":"#7f94a6","recipe":[1,1,0,3,1,14,0],"desc":"灰灰的蓝","stars":5},{"name":"石板路","hex":"#8a8a7f","recipe":[1,1,1,3,0,13,1],"desc":"下过雨的石板路","stars":5},{"name":"薄暮","hex":"#887898","recipe":[1,2,0,1,1,14,1],"desc":"太阳下山后的那会儿","stars":5}];
 const MAX_DROPS = 24, TRIES = 6, PASS = 97;
+const PREVIEW = !!window.claude || /(^|\.)claude(usercontent)?\.(ai|com)$/.test(location.hostname);
 const $ = id => document.getElementById(id);
 const el = (t, c, x) => { const e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; };
 const store = {
@@ -271,7 +289,9 @@ function newRound(practice){
   if (saved && saved.name !== c.name) saved = null;
   S = {practice, color: c, tLin: hexToRgb(c.hex).map(toLin), counts: PIGMENTS.map(() => 0), history: [], tries: [], done: false};
   S.tLab = linToLab(S.tLin);
-  if (saved){ S.counts = saved.counts; S.history = saved.history || []; S.tries = saved.tries; S.done = saved.done; }
+  if (saved){ S.counts = saved.counts; S.history = saved.history || []; S.tries = saved.tries; S.done = saved.done; S.t0 = saved.t0 || 0; S.secs = saved.secs; }
+  // 今天的已经调完，但成绩还没交过（比如排行榜上线之前玩的）：补交
+  if (S.done && !practice && store.get('posted', 0) !== TODAY && !store.get('pending', null)) queueScore();
   shown = mixed() || null;
   blobs = [];
   render();
@@ -279,7 +299,7 @@ function newRound(practice){
 }
 const dropsUsed = () => S.counts.reduce((a, b) => a + b, 0);
 const mixed = () => mix(S.counts);
-function save(){ if (!S.practice) store.set('day:' + TODAY, {name: S.color.name, counts: S.counts, history: S.history, tries: S.tries, done: S.done}); }
+function save(){ if (!S.practice) store.set('day:' + TODAY, {name: S.color.name, counts: S.counts, history: S.history, tries: S.tries, done: S.done, t0: S.t0, secs: S.secs}); }
 
 /* ================= 画面 ================= */
 function diffEl(stars){
@@ -428,6 +448,7 @@ function addDrop(i){
   drips.push({x, y0: -10, y1: y, t0: t, color: PIGMENTS[i].hex});
   setTimeout(() => {
     const was = shown;
+    if (!S.t0) S.t0 = Date.now();
     S.counts[i]++;
     S.history.push(i);
     if (!was) shown = mixed();
@@ -451,7 +472,12 @@ function check(){
   v.querySelector('b').textContent = s >= 99.5 ? '一模一样！' : s >= PASS ? '神了！' : s >= 90 ? '很接近了' : s >= 80 ? '有点像了' : s >= 65 ? '方向对了' : '差得有点远';
   v.classList.add('show');
   setTimeout(() => v.classList.remove('show'), 1300);
-  if (s >= PASS || S.tries.length >= TRIES){ S.done = true; Sound.win(s >= PASS); if (!S.practice) record(); setTimeout(() => showResult(true), 1400); }
+  if (s >= PASS || S.tries.length >= TRIES){
+    S.done = true;
+    Sound.win(s >= PASS);
+    if (!S.practice){ S.secs = S.t0 ? Math.round((Date.now() - S.t0) / 1000) : null; record(); queueScore(); flushScore().catch(() => {}); }
+    setTimeout(() => showResult(true), 1400);
+  }
   else Sound.check(s);
   save();
   render();
@@ -474,7 +500,6 @@ function shareText(){
   const best = Math.max(...S.tries.map(t => t.s)), ok = best >= PASS;
   return `今日一色 第${TODAY}期「${S.color.name}」${'★'.repeat(S.color.stars)}\n${S.tries.map(t => toEmoji(t.hex)).join('')} ${ok ? S.tries.length : 'X'}/${TRIES} · ${pct(best)}%\n` + (location.protocol.startsWith('http') && !PREVIEW ? location.origin + location.pathname : '');
 }
-const PREVIEW = !!window.claude || /(^|\.)claude(usercontent)?\.(ai|com)$/.test(location.hostname);
 function showResult(fresh){
   const best = Math.max(...S.tries.map(t => t.s)), ok = best >= PASS;
   const card = el('div', 'card');
@@ -499,7 +524,11 @@ function showResult(fresh){
   }
   const row = el('div', 'row');
   if (!S.practice){
-    const share = el('button', 'btn main', '复制成绩');
+    const lb = el('button', 'btn main', me().name ? '看排行榜' : '上排行榜');
+    lb.type = 'button';
+    lb.addEventListener('click', () => (me().name ? showBoard() : askName(showBoard)));
+    card.appendChild(lb);
+    const share = el('button', 'btn', '复制成绩');
     share.type = 'button';
     share.addEventListener('click', () => { const t = shareText(); const done = () => toast('复制好了，发给朋友吧'); try { navigator.clipboard.writeText(t).then(done, () => fallbackCopy(t)); } catch (e){ fallbackCopy(t); } });
     row.appendChild(share);
@@ -521,6 +550,134 @@ function showResult(fresh){
   card.appendChild(close);
   openModal(card);
 }
+/* ================= 排行榜 ================= */
+// Supabase 项目的地址和公开 key（公开 key 本来就是给网页用的，能读榜、能交成绩，改不了别人的）
+const BOARD = {url: 'https://ghjrmmqnajguwkfoplgo.supabase.co', key: 'sb_publishable_1YWUN4fZ3c_TjQD9p6Lmlg_K-vDB6y_'};
+// 每个人一个只存在自己手机上的编号（交成绩、改名用），和一个公开的短标记（榜上认出自己用）
+function me(){
+  let m = store.get('me', null);
+  if (!m){
+    const hex = n => Array.from(crypto.getRandomValues(new Uint8Array(n)), b => b.toString(16).padStart(2, '0')).join('');
+    const h = hex(16);
+    m = {pid: `${h.slice(0, 8)}-${h.slice(8, 12)}-4${h.slice(13, 16)}-a${h.slice(17, 20)}-${h.slice(20, 32)}`, tag: hex(4), name: ''};
+    store.set('me', m);
+  }
+  return m;
+}
+let api = async (path, body) => {
+  const headers = {apikey: BOARD.key, 'Content-Type': 'application/json'};
+  const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), 8000);
+  try {
+    const r = await fetch(BOARD.url + '/rest/v1/' + path, body ? {method: 'POST', headers, body: JSON.stringify(body), signal: ctl.signal} : {headers, signal: ctl.signal});
+    if (!r.ok) throw new Error('http ' + r.status);
+    const txt = await r.text();
+    return txt ? JSON.parse(txt) : null;
+  } finally {
+    clearTimeout(timer);
+  }
+};
+// 排名：先比调没调成，再比用了几次，再比像不像，最后比用时
+const fetchBoard = day => api(`jrys_scores?select=tag,name,solved,tries,best,secs,hex&day=eq.${day}&order=solved.desc,tries.asc,best.desc,secs.asc.nullslast,created_at.asc&limit=200`);
+// 调完先记下来，有名字、有网的时候再交；交过一次就不再交（一天只算第一局）
+function queueScore(){
+  const best = Math.max(...S.tries.map(t => t.s)), bt = S.tries.find(t => t.s === best);
+  store.set('pending', {day: TODAY, tries: S.tries.length, best: Math.round(Math.min(100, best) * 10) / 10, secs: S.secs == null ? null : Math.min(86400, S.secs), hex: bt.hex});
+}
+async function flushScore(){
+  const sc = store.get('pending', null), m = me();
+  if (!sc || !m.name || PREVIEW) return null;
+  if (sc.day !== TODAY && sc.day !== TODAY - 1){ store.set('pending', null); return null; }
+  const res = await api('rpc/jrys_submit', {p_day: sc.day, p_player: m.pid, p_tag: m.tag, p_name: m.name, p_tries: sc.tries, p_best: sc.best, p_secs: sc.secs, p_hex: sc.hex});
+  store.set('pending', null);
+  store.set('posted', sc.day);
+  return res;
+}
+const fmtSecs = s => (s == null ? '' : s >= 3600 ? '1 小时以上' : `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`);
+async function showBoard(){
+  const card = el('div', 'card');
+  card.append(el('h2', '', '今天的排行榜'), el('p', 'small', `第 ${TODAY} 期「${colorOfDay(TODAY).name}」· 先比几次调成，再比像不像，最后比用时`));
+  const mine = el('p', 'mine');
+  const list = el('div', 'blist');
+  list.appendChild(el('p', 'bnote', '正在打开排行榜…'));
+  card.append(mine, list);
+  const row = el('div', 'row');
+  const nm = el('button', 'btn', me().name ? '改名字' : '起个名字');
+  nm.type = 'button';
+  nm.addEventListener('click', () => askName(showBoard));
+  const close = el('button', 'btn main', '关闭');
+  close.type = 'button';
+  close.addEventListener('click', closeModal);
+  row.append(nm, close);
+  card.appendChild(row);
+  openModal(card);
+  if (PREVIEW){ list.replaceChildren(el('p', 'bnote', '预览里连不上排行榜，到网页版看：ricolalemon.github.io/jinriyise')); return; }
+  let res = null;
+  try { res = await flushScore(); } catch (e){}
+  let rows;
+  try { rows = await fetchBoard(TODAY); } catch (e){ if (list.isConnected) list.replaceChildren(el('p', 'bnote', '排行榜没连上，过一会儿再试')); return; }
+  if (!list.isConnected) return;
+  const m = me();
+  list.replaceChildren();
+  if (!rows.length) list.appendChild(el('p', 'bnote', '今天还没有人上榜，来当第一个'));
+  let myRank = 0;
+  rows.forEach((r, k) => {
+    const isMe = r.tag === m.tag;
+    if (isMe) myRank = k + 1;
+    const d = el('div', 'brow' + (isMe ? ' me' : ''));
+    const rk = el('span', 'rk' + (k < 3 ? ' g' + (k + 1) : ''), String(k + 1));
+    const sw = el('i');
+    sw.style.setProperty('--c', r.hex);
+    const bs = el('span', 'bs');
+    const head = el('b', r.solved ? '' : 'fail', r.solved ? `${r.tries} 次 · ${pct(r.best)}%` : `没调成 · ${pct(r.best)}%`);
+    bs.append(head, document.createTextNode(fmtSecs(r.secs)));
+    d.append(rk, sw, el('span', 'bn', r.name + (isMe ? '（我）' : '')), bs);
+    list.appendChild(d);
+  });
+  if (myRank) mine.textContent = `你排第 ${myRank} 名，一共 ${rows.length}${rows.length >= 200 ? '+' : ''} 人`;
+  else if (res && res.rank) mine.textContent = `你排第 ${res.rank} 名，一共 ${res.total} 人`;
+  else if (store.get('posted', 0) === TODAY) mine.textContent = '你在 200 名以外';
+  else if (S && S.done && !S.practice) mine.textContent = m.name ? '成绩还没交上去，过一会儿再打开试试' : '起个名字就能上榜';
+  else mine.textContent = '调完今天的颜色就能上榜';
+  if (myRank) setTimeout(() => list.children[myRank - 1]?.scrollIntoView({block: 'nearest'}), 50);
+}
+function askName(then){
+  const card = el('div', 'card');
+  const m = me();
+  card.append(el('h2', '', m.name ? '改个名字' : '起个名字上榜'), el('p', 'small', '排行榜上显示这个名字，最多 12 个字'));
+  const input = el('input', 'name-field');
+  input.type = 'text';
+  input.maxLength = 12;
+  input.placeholder = '比如：调色小天才';
+  input.value = m.name || '';
+  input.autocomplete = 'nickname';
+  input.enterKeyHint = 'done';
+  input.setAttribute('aria-label', '昵称');
+  const err = el('p', 'name-err');
+  err.setAttribute('role', 'alert');
+  card.append(input, err);
+  const ok = () => {
+    const name = input.value.trim().slice(0, 12);
+    if (!name){ err.textContent = '先起个名字'; input.focus(); return; }
+    const renamed = m.name && m.name !== name;
+    store.set('me', Object.assign(me(), {name}));
+    if (renamed && !PREVIEW) api('rpc/jrys_rename', {p_player: m.pid, p_name: name}).catch(() => {});
+    then();
+  };
+  // 回车只算一次：不拦住的话，这一下还会按到下一个弹窗里的按钮
+  input.addEventListener('keydown', e => { if (e.key !== 'Enter' || e.isComposing) return; e.preventDefault(); ok(); });
+  const row = el('div', 'row');
+  const skip = el('button', 'btn', m.name ? '不改了' : '先不上榜');
+  skip.type = 'button';
+  skip.addEventListener('click', m.name ? then : closeModal);
+  const go = el('button', 'btn main', '好了');
+  go.type = 'button';
+  go.addEventListener('click', ok);
+  row.append(skip, go);
+  card.appendChild(row);
+  openModal(card);
+  // 改名的时候旧名字整个选中，直接打字就替换掉
+  setTimeout(() => { input.focus(); input.select(); }, 60);
+}
 function fallbackCopy(t){
   const ta = el('textarea'); ta.value = t; ta.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(ta); ta.select();
   try { document.execCommand('copy'); toast('复制好了，发给朋友吧'); } catch (e){ toast('复制不了，可以截图分享'); }
@@ -530,7 +687,7 @@ function help(){
   const card = el('div', 'card');
   card.appendChild(el('h2', '', '怎么玩'));
   const ul = el('ul', 'how');
-  for (const t of ['每天一个颜色，所有人都是同一题。', '点颜料瓶往碗里滴，像真的颜料一样混：黄加蓝变绿，加白变浅，加黑变暗。白色一滴是一大勺，黑色很浓，一点就够。', '觉得像了就点「比一比」，会告诉你相似度，还有偏亮偏暗、偏哪个色、太艳还是太灰。', `一共 ${TRIES} 次机会，到 ${PASS}% 就算调成。碗最多装 ${MAX_DROPS} 滴，可以撤一滴，也可以倒掉重来。`, '每个颜色都得用三种以上的颜料。周一周二有点难，周三到周五挺难，周末超难。']) ul.appendChild(el('li', '', t));
+  for (const t of ['每天一个颜色，所有人都是同一题。', '点颜料瓶往碗里滴，像真的颜料一样混：黄加蓝变绿，加白变浅，加黑变暗。白色一滴是一大勺，黑色很浓，一点就够。', '觉得像了就点「比一比」，会告诉你相似度，还有偏亮偏暗、偏哪个色、太艳还是太灰。', `一共 ${TRIES} 次机会，到 ${PASS}% 就算调成。碗最多装 ${MAX_DROPS} 滴，可以撤一滴，也可以倒掉重来。`, '每个颜色都得用三种以上的颜料。周一周二有点难，周三到周五挺难，周末超难。', '每天第一局的成绩会上排行榜：先比几次调成，再比像不像，最后比用时。']) ul.appendChild(el('li', '', t));
   card.appendChild(ul);
   const ok = el('button', 'btn main', '开始调色');
   ok.type = 'button';
@@ -563,6 +720,7 @@ $('btnUndo').addEventListener('click', undo);
 $('btnPour').addEventListener('click', pour);
 $('btnCheck').addEventListener('click', check);
 $('btnHelp').addEventListener('click', help);
+$('btnBoard').addEventListener('click', showBoard);
 $('btnPractice').addEventListener('click', () => { if (S.practice){ newRound(false); toast('回到今天的题'); } else { newRound(true); toast('练习：随便调，不计分'); } });
 $('btnSound').addEventListener('click', () => { Sound.unlock(); Sound.set(!Sound.on); $('btnSound').textContent = Sound.on ? '🔊' : '🔇'; });
 $('btnSound').textContent = Sound.on ? '🔊' : '🔇';
@@ -570,7 +728,7 @@ fit();
 newRound(false);
 requestAnimationFrame(frame);
 if (!store.get('seenHelp', false)){ store.set('seenHelp', true); setTimeout(help, 300); }
-if (['localhost', '127.0.0.1'].includes(location.hostname)) window.__c = {get S(){ return S; }, addDrop, check, undo, pour, newRound, mix, COLORS, PIGMENTS, similarity, linToLab, colorOfDay, starsOf};
+if (['localhost', '127.0.0.1'].includes(location.hostname)) window.__c = {get S(){ return S; }, mock(fn){ api = fn; }, showBoard, addDrop, check, undo, pour, newRound, mix, COLORS, PIGMENTS, similarity, linToLab, colorOfDay, starsOf};
 })();
 </script>
 
