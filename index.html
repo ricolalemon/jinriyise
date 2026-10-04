@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta charset="utf-8">
+<title>今日一色</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600;900&display=swap">
+<style>
+/* 宣纸底子、朱红印章、青花碗。每天一个中国传统色，用七种国画颜料一滴一滴调出来。外观固定是纸的颜色，不跟系统深色走 */
+:root{
+  color-scheme:light;
+  --paper:#f3ece0;
+  --paper2:#e9dfcd;
+  --ink:#2b2522;
+  --soft:#6f655c;
+  --line:rgba(60,40,20,.14);
+  --seal:#b8322a;
+  --qing:#2c4f8a;
+  --font-brush:"Ma Shan Zheng","STKaiti","KaiTi",serif;
+  --font-body:"Noto Serif SC","Songti SC","SimSun",serif;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;min-height:100%}
+body{color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;touch-action:manipulation;-webkit-user-select:none;user-select:none;
+  background-color:var(--paper);
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .35  0 0 0 0 .27  0 0 0 0 .18  0 0 0 .09 0'/></filter><rect width='240' height='240' filter='url(%23n)'/></svg>"),radial-gradient(120% 70% at 50% 0%,#f8f3ea 0%,var(--paper) 55%,var(--paper2) 100%);
+  background-attachment:fixed}
+button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+button:focus-visible{outline:2px solid var(--seal);outline-offset:3px}
+.wrap{width:min(440px,100%);margin:0 auto;padding:calc(14px + env(safe-area-inset-top,0px)) 16px calc(22px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:12px}
+
+/* 抬头：印章加期数 */
+header{display:flex;align-items:center;gap:12px}
+.seal{flex:none;width:58px;height:58px;border-radius:8px;background:var(--seal);color:#fff4ea;display:grid;grid-template-columns:1fr 1fr;place-items:center;padding:6px;font-family:var(--font-brush);font-size:20px;line-height:1;box-shadow:inset 0 0 0 2px rgba(255,240,220,.35),0 2px 0 rgba(120,20,10,.25);transform:rotate(-4deg)}
+.seal span{display:block}
+.hd{flex:1;min-width:0}
+.hd h1{margin:0;font-family:var(--font-brush);font-weight:400;font-size:30px;line-height:1.1;letter-spacing:.08em}
+.hd p{margin:0;color:var(--soft);font-size:13px}
+.icons{display:flex;gap:6px}
+.icon{width:36px;height:36px;border:0;border-radius:50%;background:rgba(255,255,255,.55);box-shadow:inset 0 0 0 1px var(--line);font-size:15px;display:grid;place-items:center}
+
+/* 今天的颜色：一张色卡 */
+.target{position:relative;height:150px;border-radius:14px;overflow:hidden;box-shadow:0 10px 24px rgba(60,30,10,.18),inset 0 0 0 1px rgba(0,0,0,.06);transition:background-color .6s}
+.target::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,0) 40%,rgba(0,0,0,.06));pointer-events:none}
+.target .name{position:absolute;right:16px;top:12px;writing-mode:vertical-rl;font-family:var(--font-brush);font-size:42px;line-height:1;letter-spacing:.12em}
+.target .desc{position:absolute;left:16px;bottom:12px;right:80px;font-size:13px;line-height:1.5}
+.target .hex{position:absolute;left:16px;top:12px;font-size:12px;letter-spacing:.08em;opacity:.8}
+.target.light{color:#2b2522}
+.target.dark{color:#fbf6ee}
+
+/* 碗 */
+.bowlbox{position:relative;display:grid;place-items:center;margin-top:-4px}
+#bowl{width:min(300px,78vw);aspect-ratio:1;display:block}
+.bowl-note{position:absolute;bottom:14%;left:0;right:0;text-align:center;color:var(--soft);font-size:13px;pointer-events:none}
+.count{position:absolute;right:4px;top:4px;padding:2px 10px;border-radius:999px;background:rgba(255,255,255,.6);box-shadow:inset 0 0 0 1px var(--line);font-size:12px;color:var(--soft)}
+.verdict{position:absolute;left:0;right:0;top:44%;text-align:center;pointer-events:none;opacity:0;transform:scale(.8);transition:opacity .3s,transform .4s cubic-bezier(.2,.9,.3,1.4)}
+.verdict.show{opacity:1;transform:none}
+.verdict b{display:inline-block;padding:4px 16px;border-radius:999px;background:rgba(255,255,255,.88);box-shadow:0 6px 16px rgba(0,0,0,.12);font-family:var(--font-brush);font-weight:400;font-size:30px;letter-spacing:.04em}
+
+/* 七个颜料碟 */
+.dishes{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.dish{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;border:0;background:none;padding:2px 0}
+.dish .d{width:44px;height:44px;border-radius:50%;background:radial-gradient(circle at 50% 46%,var(--c) 0 52%,transparent 54%),radial-gradient(circle at 38% 32%,#fff 0,#f4f1ea 42%,#d9d2c4 100%);box-shadow:0 3px 6px rgba(60,30,10,.18),inset 0 -2px 3px rgba(0,0,0,.08);transition:transform .12s}
+.dish .d::after{content:"";display:block;width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 40% 36%,rgba(255,255,255,.55) 0 8%,transparent 20%)}
+.dish:active .d{transform:scale(.9)}
+.dish .n{font-family:var(--font-brush);font-size:16px;line-height:1}
+.dish .k{position:absolute;top:-2px;right:calc(50% - 30px);min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--seal);color:#fff;font-size:11px;font-weight:600;line-height:18px;text-align:center}
+.dish:disabled{opacity:.4}
+
+.ctrl{display:flex;gap:8px}
+.btn{flex:1;border:0;border-radius:12px;padding:11px 10px;background:rgba(255,255,255,.62);box-shadow:inset 0 0 0 1px var(--line);font-size:15px;font-weight:600}
+.btn.main{flex:1.6;background:var(--ink);color:#f8f3ea;box-shadow:0 6px 14px rgba(40,25,15,.25)}
+.btn:disabled{opacity:.4}
+.btn:active:not(:disabled){transform:translateY(1px)}
+
+/* 每一次比一比 */
+.tries{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+.try{display:flex;flex-direction:column;align-items:center;gap:3px}
+.try .sw{width:38px;height:38px;border-radius:50%;border:1.5px dashed rgba(60,40,20,.25)}
+.try.done .sw{border:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08),0 2px 5px rgba(0,0,0,.12)}
+.try .p{font-size:12px;color:var(--soft);font-weight:600;min-height:1.4em}
+.try.best .p{color:var(--seal)}
+.hints{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;min-height:30px}
+.hint{padding:3px 12px;border-radius:999px;background:rgba(255,255,255,.65);box-shadow:inset 0 0 0 1px var(--line);font-size:13px}
+.hint.big{background:var(--ink);color:#f8f3ea;box-shadow:none;font-weight:600}
+footer{text-align:center;color:var(--soft);font-size:12px}
+
+/* 弹窗 */
+#modal{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(40,25,15,.35);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+.card{width:min(380px,100%);max-height:calc(100% - 16px);overflow:auto;border-radius:18px;background:var(--paper);background-image:inherit;box-shadow:0 24px 60px rgba(40,20,10,.35);padding:18px;display:flex;flex-direction:column;gap:12px;animation:pop .35s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes pop{from{transform:translateY(14px) scale(.96);opacity:0}}
+.card h2{margin:0;font-family:var(--font-brush);font-weight:400;font-size:30px;text-align:center;letter-spacing:.08em}
+.card p{margin:0}
+.card .swatch{position:relative;height:120px;border-radius:12px;overflow:hidden}
+.card .swatch .name{position:absolute;right:14px;top:10px;writing-mode:vertical-rl;font-family:var(--font-brush);font-size:36px;line-height:1}
+.card .swatch .hex{position:absolute;left:14px;bottom:10px;font-size:12px;letter-spacing:.08em}
+.score{text-align:center;font-family:var(--font-brush);font-size:56px;line-height:1}
+.score small{display:block;font-family:var(--font-body);font-size:13px;color:var(--soft)}
+.recipe{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.recipe .r{display:flex;flex-direction:column;align-items:center;font-size:12px}
+.recipe .r i{display:block;width:30px;height:30px;border-radius:50%;background:var(--c);box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+.recipe .r b{font-family:var(--font-brush);font-weight:400;font-size:15px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);text-align:center;gap:6px}
+.stats b{display:block;font-size:22px}
+.stats span{font-size:12px;color:var(--soft)}
+.row{display:flex;gap:8px}
+.row > *{flex:1}
+.small{font-size:12px;color:var(--soft);text-align:center}
+.toast{position:fixed;left:50%;top:18px;z-index:30;transform:translate(-50%,-10px);opacity:0;padding:8px 18px;border-radius:999px;background:var(--ink);color:#f8f3ea;font-size:14px;transition:all .25s;pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){.card{animation:none}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="seal" aria-hidden="true"><span>今</span><span>日</span><span>一</span><span>色</span></div>
+    <div class="hd"><h1 id="title">今日一色</h1><p id="sub"></p></div>
+    <div class="icons">
+      <button class="icon" id="btnPractice" type="button" aria-label="练一练">练</button>
+      <button class="icon" id="btnHelp" type="button" aria-label="怎么玩">?</button>
+      <button class="icon" id="btnSound" type="button" aria-label="声音">🔊</button>
+    </div>
+  </header>
+
+  <div class="target" id="target"><span class="hex" id="tHex"></span><span class="name" id="tName"></span><span class="desc" id="tDesc"></span></div>
+
+  <div class="bowlbox">
+    <canvas id="bowl" aria-label="调色碗"></canvas>
+    <span class="count" id="count">0 / 24 滴</span>
+    <div class="bowl-note" id="bowlNote">点下面的颜料，往碗里滴</div>
+    <div class="verdict" id="verdict"><b></b></div>
+  </div>
+
+  <div class="dishes" id="dishes"></div>
+
+  <div class="ctrl">
+    <button class="btn" id="btnUndo" type="button">撤一滴</button>
+    <button class="btn" id="btnPour" type="button">倒掉</button>
+    <button class="btn main" id="btnCheck" type="button">比一比</button>
+  </div>
+
+  <div class="hints" id="hints"></div>
+  <div class="tries" id="tries"></div>
+  <footer id="foot">每天一个中国传统色 · 六次机会</footer>
+</div>
+<div id="modal" hidden></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(() => {
+'use strict';
+const PIGMENTS = [{"id": "zhusha", "name": "朱砂", "hex": "#e2452b", "k": 1}, {"id": "yanzhi", "name": "胭脂", "hex": "#b81d52", "k": 1}, {"id": "tenghuang", "name": "藤黄", "hex": "#f8c81c", "k": 1}, {"id": "shilv", "name": "石绿", "hex": "#2fae7a", "k": 1}, {"id": "huaqing", "name": "花青", "hex": "#1d5e9a", "k": 1}, {"id": "baifen", "name": "白粉", "hex": "#f8f6f0", "k": 4}, {"id": "mo", "name": "墨", "hex": "#232125", "k": 0.5}];
+const COLORS = [{"name": "玄青", "hex": "#3d3b4f", "recipe": [1, 4, 1, 5, 2, 1, 0], "desc": "深黑带青"}, {"name": "绛紫", "hex": "#8c4356", "recipe": [5, 5, 0, 1, 0, 5, 1], "desc": "深沉的紫红"}, {"name": "赭石", "hex": "#835a33", "recipe": [3, 2, 7, 2, 0, 3, 0], "desc": "国画颜料，红褐色的土"}, {"name": "黛绿", "hex": "#3d5b4a", "recipe": [2, 1, 2, 1, 5, 3, 1], "desc": "深山老林的绿"}, {"name": "黛蓝", "hex": "#435166", "recipe": [1, 2, 0, 9, 0, 2, 1], "desc": "古时女子画眉用的青黑色"}, {"name": "鸦青", "hex": "#434c50", "recipe": [1, 3, 2, 2, 4, 3, 0], "desc": "乌鸦羽毛，黑里透着青"}, {"name": "葡萄紫", "hex": "#7b3b6a", "recipe": [0, 6, 0, 0, 0, 5, 3], "desc": "熟透的葡萄"}, {"name": "苔绿", "hex": "#6c7d3a", "recipe": [0, 0, 8, 0, 1, 6, 3], "desc": "石上青苔"}, {"name": "藏青", "hex": "#2c4d7d", "recipe": [0, 2, 0, 3, 9, 2, 1], "desc": "蓝里带黑"}, {"name": "嫣红", "hex": "#ed7a81", "recipe": [1, 2, 1, 0, 0, 12, 0], "desc": "原来姹紫嫣红开遍"}, {"name": "檀色", "hex": "#b26e62", "recipe": [6, 1, 0, 0, 0, 9, 1], "desc": "浅红褐，像檀木"}, {"name": "枫叶红", "hex": "#c5262c", "recipe": [0, 8, 5, 0, 0, 0, 0], "desc": "霜叶红于二月花"}, {"name": "桂黄", "hex": "#f7c460", "recipe": [1, 0, 3, 0, 0, 10, 0], "desc": "桂花开了"}, {"name": "竹青", "hex": "#7a9263", "recipe": [0, 0, 1, 1, 0, 4, 1], "desc": "新竹竿上的青绿"}, {"name": "青碧", "hex": "#4bbfa4", "recipe": [0, 0, 0, 11, 1, 6, 0], "desc": "鲜亮的青绿"}, {"name": "天水碧", "hex": "#5da3ad", "recipe": [0, 0, 0, 3, 3, 11, 1], "desc": "传说南唐宫人晾在院里的绢被露水染成的碧色"}, {"name": "墨灰", "hex": "#748897", "recipe": [1, 1, 0, 5, 0, 9, 0], "desc": "淡墨晕开的灰"}, {"name": "霁青", "hex": "#63bcd0", "recipe": [0, 0, 0, 1, 2, 7, 0], "desc": "雨后放晴的天空"}, {"name": "群青", "hex": "#3d5da5", "recipe": [0, 2, 0, 0, 7, 5, 0], "desc": "深而浓的蓝"}, {"name": "妃色", "hex": "#e95b38", "recipe": [14, 0, 1, 0, 0, 3, 0], "desc": "介于红和橙之间的娇艳"}, {"name": "竹月", "hex": "#7fa5af", "recipe": [0, 0, 0, 0, 1, 9, 1], "desc": "月光照在竹林上"}, {"name": "赤金", "hex": "#f7c043", "recipe": [1, 0, 7, 0, 0, 8, 0], "desc": "金子的暖黄"}, {"name": "酡红", "hex": "#d73827", "recipe": [5, 2, 3, 0, 0, 0, 0], "desc": "饮酒后脸上的红"}, {"name": "驼色", "hex": "#a7845f", "recipe": [6, 0, 0, 1, 0, 7, 0], "desc": "骆驼毛的浅褐"}, {"name": "翠绿", "hex": "#32a062", "recipe": [0, 0, 1, 14, 2, 1, 0], "desc": "两个黄鹂鸣翠柳"}, {"name": "茜色", "hex": "#d03254", "recipe": [1, 8, 1, 0, 0, 3, 0], "desc": "茜草根染出的红"}, {"name": "靛青", "hex": "#2d7cac", "recipe": [0, 0, 0, 1, 7, 2, 0], "desc": "蓼蓝草染出的深蓝"}, {"name": "桃红", "hex": "#ee7c84", "recipe": [2, 1, 0, 0, 0, 8, 0], "desc": "人面桃花相映红"}, {"name": "苍色", "hex": "#78878a", "recipe": [2, 1, 0, 5, 0, 10, 0], "desc": "苍山的灰青"}, {"name": "灰蓝", "hex": "#798fa6", "recipe": [1, 1, 0, 1, 2, 13, 0], "desc": "阴天的远山"}, {"name": "石青", "hex": "#3085a5", "recipe": [0, 0, 0, 4, 8, 3, 0], "desc": "国画颜料，用蓝铜矿研磨"}, {"name": "海棠红", "hex": "#e3546a", "recipe": [0, 5, 2, 0, 0, 9, 0], "desc": "知否，知否？应是绿肥红瘦"}, {"name": "松花", "hex": "#b8eb70", "recipe": [0, 0, 3, 1, 0, 14, 0], "desc": "春天松树的花粉"}, {"name": "银红", "hex": "#e65a55", "recipe": [7, 2, 0, 0, 0, 6, 0], "desc": "带一点粉的亮红"}, {"name": "水绿", "hex": "#86c2ad", "recipe": [1, 0, 0, 2, 1, 14, 0], "desc": "春水微绿"}, {"name": "栗色", "hex": "#632e24", "recipe": [0, 5, 8, 0, 0, 0, 3], "desc": "炒栗子的壳"}, {"name": "柳绿", "hex": "#96d458", "recipe": [0, 0, 5, 0, 1, 11, 0], "desc": "早春新柳"}, {"name": "豆绿", "hex": "#92d045", "recipe": [0, 0, 8, 0, 1, 9, 0], "desc": "刚剥出来的青豆"}, {"name": "杏黄", "hex": "#f5a436", "recipe": [2, 0, 8, 0, 0, 5, 0], "desc": "熟透的杏子"}, {"name": "姜黄", "hex": "#f7c168", "recipe": [1, 0, 2, 0, 0, 9, 0], "desc": "切开的老姜"}, {"name": "柿红", "hex": "#e75224", "recipe": [2, 0, 1, 0, 0, 0, 0], "desc": "挂在枝头的柿子"}, {"name": "绯红", "hex": "#d33422", "recipe": [0, 1, 2, 0, 0, 0, 0], "desc": "鲜亮的正红"}, {"name": "缃色", "hex": "#f7c449", "recipe": [1, 0, 7, 0, 0, 10, 0], "desc": "浅黄，古人包书卷的帛就是这个颜色"}, {"name": "秋香", "hex": "#bcad74", "recipe": [1, 0, 2, 0, 0, 14, 1], "desc": "秋天草木将黄未黄的颜色"}, {"name": "鹅黄", "hex": "#f8e84f", "recipe": [0, 0, 3, 0, 0, 5, 0], "desc": "刚出壳的小鹅绒毛的嫩黄"}, {"name": "烟灰", "hex": "#99a5a9", "recipe": [0, 0, 0, 1, 0, 15, 2], "desc": "炊烟一样的灰"}, {"name": "芦灰", "hex": "#b7a89c", "recipe": [1, 0, 0, 0, 0, 12, 1], "desc": "秋天的芦苇"}, {"name": "碧色", "hex": "#4ecba2", "recipe": [0, 0, 0, 2, 0, 1, 0], "desc": "接天莲叶无穷碧"}, {"name": "橘红", "hex": "#f0781e", "recipe": [2, 0, 7, 0, 0, 0, 0], "desc": "剥开的橘子皮"}, {"name": "紫檀", "hex": "#512b25", "recipe": [0, 3, 4, 0, 0, 0, 3], "desc": "紫檀木的深褐"}, {"name": "胭脂粉", "hex": "#f29aaf", "recipe": [1, 1, 0, 0, 0, 16, 0], "desc": "胭脂兑了水"}, {"name": "黄栌", "hex": "#f4a13e", "recipe": [2, 0, 5, 0, 0, 5, 0], "desc": "黄栌木染出的暖黄"}, {"name": "雪青", "hex": "#9f9dd3", "recipe": [0, 1, 0, 0, 1, 16, 0], "desc": "淡淡的蓝紫"}, {"name": "杨妃色", "hex": "#f39f99", "recipe": [0, 1, 1, 0, 0, 16, 0], "desc": "贵妃脸上淡淡的红"}, {"name": "宝蓝", "hex": "#4d5fa8", "recipe": [0, 3, 0, 0, 6, 8, 0], "desc": "像蓝宝石一样"}, {"name": "土黄", "hex": "#b9a160", "recipe": [2, 0, 3, 0, 0, 12, 1], "desc": "黄土高原"}, {"name": "丁香", "hex": "#bb9fd0", "recipe": [0, 1, 0, 1, 0, 16, 0], "desc": "丁香空结雨中愁"}, {"name": "紫棠", "hex": "#581f55", "recipe": [0, 9, 0, 0, 1, 0, 0], "desc": "紫得发黑"}];
+const MAX_DROPS = 24, TRIES = 6, PASS = 97;
+const $ = id => document.getElementById(id);
+const el = (t, c, x) => { const e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; };
+const store = {
+  get(k, d){ try { const v = localStorage.getItem('jrys:' + k); return v == null ? d : JSON.parse(v); } catch (e){ return d; } },
+  set(k, v){ try { localStorage.setItem('jrys:' + k, JSON.stringify(v)); } catch (e){} }
+};
+let toastT = 0;
+const toast = t => { const e = $('toast'); e.textContent = t; e.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => e.classList.remove('show'), 1800); };
+
+/* ================= 颜色 ================= */
+const hexToRgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255);
+const toLin = c => (c <= .04045 ? c / 12.92 : ((c + .055) / 1.055) ** 2.4);
+const toSrgb = c => (c <= .0031308 ? 12.92 * c : 1.055 * c ** (1 / 2.4) - .055);
+const ks = R => { R = Math.min(.999, Math.max(.001, R)); return (1 - R) ** 2 / (2 * R); };
+const ksInv = k => 1 + k - Math.sqrt(k * k + 2 * k);
+const PKS = PIGMENTS.map(p => hexToRgb(p.hex).map(c => ks(toLin(c))));
+// 颜料混色：每种颜料按份数把「吸光/散光」的比值加起来，再换回颜色（Kubelka-Munk）
+function mix(counts){
+  let tot = 0;
+  for (let i = 0; i < counts.length; i++) tot += counts[i] * PIGMENTS[i].k;
+  if (!tot) return null;
+  return [0, 1, 2].map(ch => { let k = 0; for (let i = 0; i < counts.length; i++) k += counts[i] * PIGMENTS[i].k / tot * PKS[i][ch]; return ksInv(k); });
+}
+const linToCss = lin => 'rgb(' + lin.map(c => Math.round(Math.min(1, Math.max(0, toSrgb(c))) * 255)).join(',') + ')';
+const linToHex = lin => '#' + lin.map(c => Math.round(Math.min(1, Math.max(0, toSrgb(c))) * 255).toString(16).padStart(2, '0')).join('');
+function linToLab(rgb){
+  const [r, g, b] = rgb;
+  let X = (r * .4124 + g * .3576 + b * .1805) / .95047, Y = r * .2126 + g * .7152 + b * .0722, Z = (r * .0193 + g * .1192 + b * .9505) / 1.08883;
+  const f = t => (t > .008856 ? Math.cbrt(t) : 7.787 * t + 16 / 116);
+  X = f(X); Y = f(Y); Z = f(Z);
+  return [116 * Y - 16, 500 * (X - Y), 200 * (Y - Z)];
+}
+function de2000(a, b){
+  const [L1, a1, b1] = a, [L2, a2, b2] = b, rad = Math.PI / 180;
+  const C1 = Math.hypot(a1, b1), C2 = Math.hypot(a2, b2), Cm = (C1 + C2) / 2;
+  const G = .5 * (1 - Math.sqrt(Cm ** 7 / (Cm ** 7 + 25 ** 7)));
+  const a1p = a1 * (1 + G), a2p = a2 * (1 + G);
+  const C1p = Math.hypot(a1p, b1), C2p = Math.hypot(a2p, b2);
+  const h = (x, y) => { if (!x && !y) return 0; const t = Math.atan2(y, x) / rad; return t < 0 ? t + 360 : t; };
+  const h1p = h(a1p, b1), h2p = h(a2p, b2);
+  const dLp = L2 - L1, dCp = C2p - C1p;
+  let dhp = 0;
+  if (C1p * C2p){ dhp = h2p - h1p; if (dhp > 180) dhp -= 360; else if (dhp < -180) dhp += 360; }
+  const dHp = 2 * Math.sqrt(C1p * C2p) * Math.sin(dhp / 2 * rad);
+  const Lm = (L1 + L2) / 2, Cmp = (C1p + C2p) / 2;
+  let hm = h1p + h2p;
+  if (C1p * C2p){ if (Math.abs(h1p - h2p) > 180) hm += h1p + h2p < 360 ? 360 : -360; hm /= 2; }
+  const T = 1 - .17 * Math.cos((hm - 30) * rad) + .24 * Math.cos(2 * hm * rad) + .32 * Math.cos((3 * hm + 6) * rad) - .2 * Math.cos((4 * hm - 63) * rad);
+  const dTh = 30 * Math.exp(-(((hm - 275) / 25) ** 2));
+  const Rc = 2 * Math.sqrt(Cmp ** 7 / (Cmp ** 7 + 25 ** 7));
+  const Sl = 1 + .015 * (Lm - 50) ** 2 / Math.sqrt(20 + (Lm - 50) ** 2), Sc = 1 + .045 * Cmp, Sh = 1 + .015 * Cmp * T;
+  const Rt = -Math.sin(2 * dTh * rad) * Rc;
+  return Math.sqrt((dLp / Sl) ** 2 + (dCp / Sc) ** 2 + (dHp / Sh) ** 2 + Rt * (dCp / Sc) * (dHp / Sh));
+}
+const similarity = (a, b) => Math.max(0, Math.min(100, 100 - de2000(a, b) * 2.5));
+// 显示用：调到肉眼分不出来（99.5 以上）就算 100
+const pct = s => (s >= 99.5 ? 100 : Math.floor(s));
+const lch = lab => [lab[0], Math.hypot(lab[1], lab[2]), (Math.atan2(lab[2], lab[1]) * 180 / Math.PI + 360) % 360];
+const HUES = [[25, '红'], [70, '橙'], [105, '黄'], [160, '绿'], [215, '青'], [285, '蓝'], [345, '紫'], [360, '红']];
+const hueName = h => HUES.find(([lim]) => h < lim)[1];
+function hints(mixLab, tLab){
+  const out = [];
+  const [Lm, Cm, hm] = lch(mixLab), [Lt, Ct, ht] = lch(tLab);
+  if (Lm - Lt > 3) out.push('偏亮'); else if (Lt - Lm > 3) out.push('偏暗');
+  if (Ct > 6 || Cm > 6){
+    let dh = hm - ht; if (dh > 180) dh -= 360; if (dh < -180) dh += 360;
+    const dH = 2 * Math.sqrt(Cm * Ct) * Math.sin(Math.abs(dh) / 2 * Math.PI / 180);
+    if (dH > 3.5){ const n1 = hueName(hm), n2 = hueName((ht + Math.sign(dh) * 35 + 360) % 360); out.push('偏' + (n1 !== hueName(ht) ? n1 : n2)); }
+  }
+  if (Cm - Ct > 5) out.push('太艳'); else if (Ct - Cm > 5) out.push('偏灰');
+  return out;
+}
+const lerpLin = (a, b, t) => a.map((v, i) => v + (b[i] - v) * t);
+
+/* ================= 今天是哪一题 ================= */
+const START = Date.UTC(2026, 9, 4);
+function dayNo(d = new Date()){ return Math.floor((Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) - START) / 864e5) + 1; }
+function seeded(seed){ let a = seed >>> 0; return () => { a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const ORDER = (() => { const r = seeded(20261004), idx = COLORS.map((_, i) => i); for (let i = idx.length - 1; i > 0; i--){ const j = Math.floor(r() * (i + 1)); [idx[i], idx[j]] = [idx[j], idx[i]]; } return idx; })();
+const TODAY = Math.max(1, dayNo());
+const todayColor = () => COLORS[ORDER[(TODAY - 1) % COLORS.length]];
+
+/* ================= 状态 ================= */
+let S = null;
+function newRound(practice){
+  const c = practice ? COLORS[Math.floor(Math.random() * COLORS.length)] : todayColor();
+  const saved = !practice && store.get('day:' + TODAY, null);
+  S = {practice, color: c, tLin: hexToRgb(c.hex).map(toLin), counts: PIGMENTS.map(() => 0), history: [], tries: [], done: false};
+  S.tLab = linToLab(S.tLin);
+  if (saved){ S.counts = saved.counts; S.history = saved.history || []; S.tries = saved.tries; S.done = saved.done; }
+  shown = mixed() || null;
+  blobs = [];
+  render();
+  if (S.done) setTimeout(() => showResult(false), 400);
+}
+const dropsUsed = () => S.counts.reduce((a, b) => a + b, 0);
+const mixed = () => mix(S.counts);
+function save(){ if (!S.practice) store.set('day:' + TODAY, {counts: S.counts, history: S.history, tries: S.tries, done: S.done}); }
+
+/* ================= 画面 ================= */
+function render(){
+  const c = S.color, light = linToLab(S.tLin)[0] > 62;
+  const t = $('target');
+  t.style.backgroundColor = c.hex;
+  t.className = 'target ' + (light ? 'light' : 'dark');
+  $('tName').textContent = c.name;
+  $('tDesc').textContent = c.desc;
+  $('tHex').textContent = S.done ? c.hex.toUpperCase() : '';
+  $('sub').textContent = S.practice ? '练习 · 随便调，不计分' : `第 ${TODAY} 期 · ${new Date().getMonth() + 1}月${new Date().getDate()}日`;
+  $('title').textContent = S.practice ? '练一练' : '今日一色';
+  renderDishes();
+  renderTries();
+  const used = dropsUsed();
+  $('count').textContent = `${used} / ${MAX_DROPS} 滴`;
+  $('bowlNote').hidden = used > 0;
+  $('btnUndo').disabled = !S.history.length || S.done;
+  $('btnPour').disabled = !used || S.done;
+  $('btnCheck').disabled = !used || S.done;
+  $('btnCheck').textContent = S.done ? '看结果' : `比一比（还剩 ${TRIES - S.tries.length} 次）`;
+  if (S.done) $('btnCheck').disabled = false;
+}
+function renderDishes(){
+  const box = $('dishes');
+  box.replaceChildren();
+  PIGMENTS.forEach((p, i) => {
+    const b = el('button', 'dish');
+    b.type = 'button';
+    b.style.setProperty('--c', p.hex);
+    b.setAttribute('aria-label', `${p.name}，已经滴了 ${S.counts[i]} 滴`);
+    b.append(el('span', 'd'), el('span', 'n', p.name));
+    if (S.counts[i]) b.appendChild(el('span', 'k', String(S.counts[i])));
+    b.disabled = S.done || dropsUsed() >= MAX_DROPS;
+    b.addEventListener('click', () => addDrop(i));
+    box.appendChild(b);
+  });
+}
+function renderTries(){
+  const box = $('tries');
+  box.replaceChildren();
+  const best = S.tries.length ? Math.max(...S.tries.map(t => t.s)) : -1;
+  for (let k = 0; k < TRIES; k++){
+    const t = S.tries[k], d = el('div', 'try' + (t ? ' done' : '') + (t && t.s === best ? ' best' : ''));
+    const sw = el('span', 'sw');
+    if (t) sw.style.background = t.hex;
+    d.append(sw, el('span', 'p', t ? pct(t.s) + '%' : ''));
+    box.appendChild(d);
+  }
+  const hb = $('hints');
+  hb.replaceChildren();
+  const last = S.tries[S.tries.length - 1];
+  if (last){ hb.appendChild(el('span', 'hint big', `相似 ${pct(last.s)}%`)); for (const h of last.h) hb.appendChild(el('span', 'hint', h)); if (!last.h.length && last.s < PASS) hb.appendChild(el('span', 'hint', '就差一点点比例')); }
+}
+
+/* ---------- 碗 ---------- */
+const cv = $('bowl'), ctx = cv.getContext('2d');
+let shown = null, blobs = [], drips = [], ripples = [], size = 300;
+function fit(){ const r = cv.getBoundingClientRect(); size = r.width; const d = Math.min(devicePixelRatio || 1, 2.5); cv.width = cv.height = Math.round(size * d); ctx.setTransform(d, 0, 0, d, 0, 0); }
+addEventListener('resize', fit);
+function drawBowl(t){
+  const c = ctx, W = size, cx = W / 2, cy = W / 2, R = W * .47;
+  c.clearRect(0, 0, W, W);
+  // 影子
+  const sh = c.createRadialGradient(cx + R * .06, cy + R * .1, R * .7, cx + R * .06, cy + R * .1, R * 1.06);
+  sh.addColorStop(0, 'rgba(60,35,15,.28)'); sh.addColorStop(1, 'rgba(60,35,15,0)');
+  c.fillStyle = sh; c.beginPath(); c.arc(cx + R * .06, cy + R * .1, R * 1.06, 0, 7); c.fill();
+  // 碗沿：白瓷
+  const rim = c.createRadialGradient(cx - R * .3, cy - R * .35, R * .2, cx, cy, R);
+  rim.addColorStop(0, '#ffffff'); rim.addColorStop(.7, '#f5f2ec'); rim.addColorStop(1, '#d9d1c3');
+  c.fillStyle = rim; c.beginPath(); c.arc(cx, cy, R, 0, 7); c.fill();
+  // 青花一圈
+  c.save();
+  c.strokeStyle = 'rgba(44,79,138,.85)'; c.lineWidth = R * .012;
+  c.beginPath(); c.arc(cx, cy, R * .955, 0, 7); c.stroke();
+  c.beginPath(); c.arc(cx, cy, R * .86, 0, 7); c.stroke();
+  c.lineWidth = R * .014; c.lineCap = 'round';
+  for (let k = 0; k < 24; k++){
+    const a = k / 24 * Math.PI * 2, r1 = R * .908;
+    c.beginPath(); c.arc(cx + Math.cos(a) * r1, cy + Math.sin(a) * r1, R * .028, a + .6, a + .6 + Math.PI * 1.3); c.stroke();
+    c.beginPath(); c.arc(cx + Math.cos(a + .13) * r1, cy + Math.sin(a + .13) * r1, R * .012, 0, 7); c.fillStyle = 'rgba(44,79,138,.7)'; c.fill();
+  }
+  c.restore();
+  // 碗里
+  const inner = R * .84;
+  const wall = c.createRadialGradient(cx, cy + R * .1, inner * .3, cx, cy, inner);
+  wall.addColorStop(0, '#fbfaf6'); wall.addColorStop(1, '#e3ddd1');
+  c.fillStyle = wall; c.beginPath(); c.arc(cx, cy, inner, 0, 7); c.fill();
+  // 颜料
+  const used = S ? dropsUsed() : 0;
+  if (shown){
+    const pr = inner * (.6 + .32 * Math.min(1, used / 14));
+    c.save();
+    c.beginPath(); c.arc(cx, cy + inner * .03, pr, 0, 7); c.clip();
+    c.fillStyle = linToCss(shown); c.fillRect(cx - pr, cy - pr, pr * 2, pr * 2 + inner * .06);
+    // 刚滴进去的颜料打着旋化开
+    for (const b of blobs){
+      const u = Math.min(1, (t - b.t0) / 1100), a0 = b.a + u * 5.5;
+      c.strokeStyle = b.color; c.lineCap = 'round';
+      for (let k = 0; k < 3; k++){
+        c.globalAlpha = (1 - u) * (.75 - k * .2);
+        c.lineWidth = pr * (.14 - k * .035) * (1 - u * .5);
+        const rr = pr * (.12 + u * .55 + k * .1);
+        c.beginPath(); c.arc(cx + Math.cos(b.a) * pr * .2 * (1 - u), cy + Math.sin(b.a) * pr * .2 * (1 - u), rr, a0 + k * 2.1, a0 + k * 2.1 + 1.6 + u * 1.5); c.stroke();
+      }
+      c.globalAlpha = 1;
+    }
+    // 液面的光
+    const gl = c.createRadialGradient(cx - pr * .4, cy - pr * .45, 0, cx - pr * .4, cy - pr * .45, pr * .9);
+    gl.addColorStop(0, 'rgba(255,255,255,.35)'); gl.addColorStop(1, 'rgba(255,255,255,0)');
+    c.fillStyle = gl; c.fillRect(cx - pr, cy - pr, pr * 2, pr * 2);
+    const ed = c.createRadialGradient(cx, cy, pr * .8, cx, cy, pr);
+    ed.addColorStop(0, 'rgba(0,0,0,0)'); ed.addColorStop(1, 'rgba(0,0,0,.14)');
+    c.fillStyle = ed; c.fillRect(cx - pr, cy - pr, pr * 2, pr * 2);
+    for (const r of ripples){ const u = (t - r.t0) / 900; if (u >= 1) continue; c.strokeStyle = `rgba(255,255,255,${.5 * (1 - u)})`; c.lineWidth = 1.5; c.beginPath(); c.arc(r.x, r.y, 4 + u * pr * .5, 0, 7); c.stroke(); }
+    c.restore();
+  }
+  // 正在往下掉的颜料
+  for (const d of drips){
+    const u = Math.min(1, (t - d.t0) / 260);
+    const y = d.y0 + (d.y1 - d.y0) * u * u;
+    c.fillStyle = d.color;
+    c.beginPath(); c.moveTo(d.x, y - 12); c.bezierCurveTo(d.x + 7, y - 2, d.x + 6, y + 6, d.x, y + 6); c.bezierCurveTo(d.x - 6, y + 6, d.x - 7, y - 2, d.x, y - 12); c.fill();
+  }
+}
+let last = 0;
+function frame(t){
+  if (S){
+    const target = mixed();
+    if (target && shown){ shown = lerpLin(shown, target, Math.min(1, (t - last) / 1000 * 2.4)); }
+    else shown = target;
+    blobs = blobs.filter(b => t - b.t0 < 1100);
+    drips = drips.filter(d => t - d.t0 < 260);
+    ripples = ripples.filter(r => t - r.t0 < 900);
+    drawBowl(t);
+  }
+  last = t;
+  requestAnimationFrame(frame);
+}
+
+/* ---------- 操作 ---------- */
+function addDrop(i){
+  if (S.done || dropsUsed() >= MAX_DROPS) return;
+  Sound.unlock();
+  const t = performance.now(), cx = size / 2, inner = size * .47 * .84;
+  const a = Math.random() * Math.PI * 2, d = Math.random() * inner * .35;
+  const x = cx + Math.cos(a) * d, y = size / 2 + Math.sin(a) * d;
+  drips.push({x, y0: -10, y1: y, t0: t, color: PIGMENTS[i].hex});
+  setTimeout(() => {
+    const was = shown;
+    S.counts[i]++;
+    S.history.push(i);
+    if (!was) shown = mixed();
+    blobs.push({color: PIGMENTS[i].hex, a, t0: performance.now()});
+    ripples.push({x, y, t0: performance.now()});
+    Sound.drop(i);
+    save();
+    render();
+  }, 240);
+}
+function undo(){ if (!S.history.length || S.done) return; const i = S.history.pop(); S.counts[i]--; if (!dropsUsed()) shown = null; Sound.tick(); save(); render(); }
+function pour(){ if (!dropsUsed() || S.done) return; S.counts = PIGMENTS.map(() => 0); S.history = []; shown = null; Sound.pour(); save(); render(); }
+function check(){
+  if (S.done){ showResult(false); return; }
+  const m = mixed();
+  if (!m) return;
+  const lab = linToLab(m), s = similarity(lab, S.tLab);
+  const h = s >= 99.5 ? [] : hints(lab, S.tLab);
+  S.tries.push({s, hex: linToHex(m), h, counts: S.counts.slice()});
+  const v = $('verdict');
+  v.querySelector('b').textContent = s >= 99.5 ? '一模一样！' : s >= PASS ? '神了！' : s >= 90 ? '很接近了' : s >= 80 ? '有点像了' : s >= 65 ? '方向对了' : '差得有点远';
+  v.classList.add('show');
+  setTimeout(() => v.classList.remove('show'), 1300);
+  if (s >= PASS || S.tries.length >= TRIES){ S.done = true; Sound.win(s >= PASS); if (!S.practice) record(); setTimeout(() => showResult(true), 1400); }
+  else Sound.check(s);
+  save();
+  render();
+}
+function record(){
+  const st = store.get('stats', {played: 0, wins: 0, streak: 0, best: 0, lastWin: 0, sum: 0});
+  const best = Math.max(...S.tries.map(t => t.s));
+  st.played++;
+  st.sum += best;
+  if (best >= PASS){ st.wins++; st.streak = st.lastWin === TODAY - 1 ? st.streak + 1 : 1; st.lastWin = TODAY; }
+  else st.streak = 0;
+  st.best = Math.max(st.streak, st.best);
+  store.set('stats', st);
+}
+
+/* ---------- 结果 ---------- */
+const EMOJI = [['🟥', '#dd2e44'], ['🟧', '#f4900c'], ['🟨', '#fdcb58'], ['🟩', '#78b159'], ['🟦', '#55acee'], ['🟪', '#aa8ed6'], ['🟫', '#c1694f'], ['⬛', '#31373d'], ['⬜', '#e6e7e8']].map(([e, h]) => [e, linToLab(hexToRgb(h).map(toLin))]);
+const toEmoji = hex => { const lab = linToLab(hexToRgb(hex).map(toLin)); let best = EMOJI[0], d = 1e9; for (const e of EMOJI){ const x = de2000(lab, e[1]); if (x < d){ d = x; best = e; } } return best[0]; };
+function shareText(){
+  const best = Math.max(...S.tries.map(t => t.s)), ok = best >= PASS;
+  return `今日一色 第${TODAY}期「${S.color.name}」\n${S.tries.map(t => toEmoji(t.hex)).join('')} ${ok ? S.tries.length : 'X'}/${TRIES} · ${pct(best)}%\n` + (location.protocol.startsWith('http') && !PREVIEW ? location.origin + location.pathname : '');
+}
+const PREVIEW = !!window.claude || /(^|\.)claude(usercontent)?\.(ai|com)$/.test(location.hostname);
+function showResult(fresh){
+  const best = Math.max(...S.tries.map(t => t.s)), ok = best >= PASS;
+  const card = el('div', 'card');
+  card.appendChild(el('h2', '', ok ? (best >= 99.5 ? '一模一样' : '调出来了') : '下次一定'));
+  const sw = el('div', 'swatch');
+  sw.style.background = S.color.hex;
+  const light = S.tLab[0] > 62;
+  sw.style.color = light ? '#2b2522' : '#fbf6ee';
+  sw.append(el('span', 'name', S.color.name), el('span', 'hex', S.color.hex.toUpperCase() + ' · ' + S.color.desc));
+  card.appendChild(sw);
+  const sc = el('div', 'score', pct(best) + '%');
+  sc.appendChild(el('small', '', ok ? `第 ${S.tries.findIndex(t => t.s >= PASS) + 1} 次就调出来了` : '六次都没到 97%，看看标准配方'));
+  card.appendChild(sc);
+  card.appendChild(el('p', 'small', '标准配方（按比例，滴数翻倍也一样）'));
+  const rec = el('div', 'recipe');
+  S.color.recipe.forEach((n, i) => { if (!n) return; const r = el('div', 'r'); const dot = el('i'); dot.style.setProperty('--c', PIGMENTS[i].hex); r.append(dot, el('b', '', PIGMENTS[i].name), el('span', '', n + ' 滴')); rec.appendChild(r); });
+  card.appendChild(rec);
+  if (!S.practice){
+    const st = store.get('stats', {played: 0, wins: 0, streak: 0, best: 0, sum: 0});
+    const stats = el('div', 'stats');
+    for (const [v, l] of [[st.played, '玩过'], [st.played ? Math.round(st.wins / st.played * 100) + '%' : '-', '调成'], [st.streak, '连续调成']]){ const d = el('div'); d.append(el('b', '', String(v)), el('span', '', l)); stats.appendChild(d); }
+    card.appendChild(stats);
+  }
+  const row = el('div', 'row');
+  if (!S.practice){
+    const share = el('button', 'btn main', '复制成绩');
+    share.type = 'button';
+    share.addEventListener('click', () => { const t = shareText(); const done = () => toast('复制好了，发给朋友吧'); try { navigator.clipboard.writeText(t).then(done, () => fallbackCopy(t)); } catch (e){ fallbackCopy(t); } });
+    row.appendChild(share);
+  }
+  const again = el('button', 'btn', '再练一个');
+  again.type = 'button';
+  again.addEventListener('click', () => { closeModal(); newRound(true); });
+  row.appendChild(again);
+  card.appendChild(row);
+  if (!S.practice){
+    const nx = el('p', 'small');
+    const tick = () => { const n = new Date(), m = new Date(n.getFullYear(), n.getMonth(), n.getDate() + 1); const s = Math.max(0, (m - n) / 1000 | 0); nx.textContent = `下一个颜色还有 ${String(s / 3600 | 0).padStart(2, '0')}:${String(s / 60 % 60 | 0).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`; };
+    tick(); const iv = setInterval(() => { if (!nx.isConnected) clearInterval(iv); else tick(); }, 1000);
+    card.appendChild(nx);
+  }
+  const close = el('button', 'btn', S.practice ? '回到今天的题' : '关闭');
+  close.type = 'button';
+  close.addEventListener('click', () => { closeModal(); if (S.practice) newRound(false); });
+  card.appendChild(close);
+  openModal(card);
+}
+function fallbackCopy(t){
+  const ta = el('textarea'); ta.value = t; ta.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); toast('复制好了，发给朋友吧'); } catch (e){ toast('复制不了，可以截图分享'); }
+  ta.remove();
+}
+function help(){
+  const card = el('div', 'card');
+  card.appendChild(el('h2', '', '怎么玩'));
+  for (const t of ['每天一个中国传统色，所有人都是同一题。', '点下面的颜料往碗里滴，像真的颜料一样混：黄加蓝会变绿，加白变浅，加墨变暗。白粉一滴是一大勺，墨很浓。', '觉得像了就点「比一比」，会告诉你相似度，还有偏亮偏暗、偏哪个色、太艳还是太灰。', `一共 ${TRIES} 次机会，到 ${PASS}% 就算调成。碗最多装 ${MAX_DROPS} 滴，可以撤一滴，也可以倒掉重来。`]) card.appendChild(el('p', '', t));
+  const ok = el('button', 'btn main', '开始调色');
+  ok.type = 'button';
+  ok.addEventListener('click', closeModal);
+  card.appendChild(ok);
+  openModal(card);
+}
+function openModal(card){ const m = $('modal'); m.replaceChildren(card); m.hidden = false; }
+function closeModal(){ $('modal').hidden = true; }
+$('modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+
+/* ================= 声音 ================= */
+const Sound = (() => {
+  let ac = null, out;
+  const A = {on: store.get('sound', true) !== false};
+  A.unlock = () => { if (ac){ if (ac.state === 'suspended') ac.resume(); return; } try { ac = new (window.AudioContext || window.webkitAudioContext)(); out = ac.createGain(); out.gain.value = A.on ? .8 : 0; out.connect(ac.destination); } catch (e){} };
+  const tone = (f, d = .4, g = .15, type = 'sine', t = 0, f2) => { if (!ac || !A.on) return; const t0 = ac.currentTime + t, o = ac.createOscillator(), e = ac.createGain(); o.type = type; o.frequency.setValueAtTime(f, t0); if (f2) o.frequency.exponentialRampToValueAtTime(f2, t0 + d); e.gain.setValueAtTime(.0001, t0); e.gain.linearRampToValueAtTime(g, t0 + .006); e.gain.exponentialRampToValueAtTime(.0001, t0 + d); o.connect(e); e.connect(out); o.start(t0); o.stop(t0 + d + .05); };
+  const PENTA = [523, 587, 659, 784, 880, 1047, 1175];
+  A.drop = i => { tone(PENTA[i], .5, .1); tone(PENTA[i] * 2, .15, .04, 'sine', .01); tone(1400, .08, .05, 'sine', .02, 500); };
+  A.tick = () => tone(900, .06, .06, 'triangle');
+  A.pour = () => { for (let k = 0; k < 6; k++) tone(300 - k * 30, .12, .05, 'sine', k * .04, 120); };
+  A.check = s => { tone(392, .3, .1, 'triangle'); tone(s >= 90 ? 587 : 330, .4, .08, 'triangle', .12); };
+  A.win = ok => { (ok ? [523, 587, 659, 784, 1047] : [440, 392, 330]).forEach((f, k) => tone(f, .9, .1, 'triangle', k * .12)); };
+  A.set = v => { A.on = v; store.set('sound', v); if (out) out.gain.value = v ? .8 : 0; };
+  return A;
+})();
+
+/* ================= 开机 ================= */
+$('btnUndo').addEventListener('click', undo);
+$('btnPour').addEventListener('click', pour);
+$('btnCheck').addEventListener('click', check);
+$('btnHelp').addEventListener('click', help);
+$('btnPractice').addEventListener('click', () => { if (S.practice){ newRound(false); toast('回到今天的题'); } else { newRound(true); toast('练习：随便调，不计分'); } });
+$('btnSound').addEventListener('click', () => { Sound.unlock(); Sound.set(!Sound.on); $('btnSound').textContent = Sound.on ? '🔊' : '🔇'; });
+$('btnSound').textContent = Sound.on ? '🔊' : '🔇';
+fit();
+newRound(false);
+requestAnimationFrame(frame);
+if (!store.get('seenHelp', false)){ store.set('seenHelp', true); setTimeout(help, 300); }
+if (['localhost', '127.0.0.1'].includes(location.hostname)) window.__c = {get S(){ return S; }, addDrop, check, undo, pour, newRound, mix, COLORS, PIGMENTS, similarity, linToLab};
+})();
+</script>
+
+</html>
